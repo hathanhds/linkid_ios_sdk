@@ -10,6 +10,7 @@
 		E35204802B4E97D0006C09A1 /* linkid_ios_sdk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E35204772B4E97CF006C09A1 /* linkid_ios_sdk.framework */; };
 		E35204852B4E97D0006C09A1 /* linkid_ios_sdkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E35204842B4E97D0006C09A1 /* linkid_ios_sdkTests.swift */; };
 		E35204862B4E97D0006C09A1 /* linkid_ios_sdk.h in Headers */ = {isa = PBXBuildFile; fileRef = E352047A2B4E97CF006C09A1 /* linkid_ios_sdk.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E35204902B4E97F8006C09A1 /* APIRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E352048F2B4E97F8006C09A1 /* APIRequest.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -27,6 +28,7 @@
 		E352047A2B4E97CF006C09A1 /* linkid_ios_sdk.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = linkid_ios_sdk.h; sourceTree = "<group>"; };
 		E352047F2B4E97D0006C09A1 /* linkid_ios_sdkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = linkid_ios_sdkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E35204842B4E97D0006C09A1 /* linkid_ios_sdkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = linkid_ios_sdkTests.swift; sourceTree = "<group>"; };
+		E352048F2B4E97F8006C09A1 /* APIRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIRequest.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,6 +72,7 @@
 			isa = PBXGroup;
 			children = (
 				E352047A2B4E97CF006C09A1 /* linkid_ios_sdk.h */,
+				E352048F2B4E97F8006C09A1 /* APIRequest.swift */,
 			);
 			path = linkid_ios_sdk;
 			sourceTree = "<group>";
@@ -144,6 +147,7 @@
 				TargetAttributes = {
 					E35204762B4E97CF006C09A1 = {
 						CreatedOnToolsVersion = 15.0.1;
+						LastSwiftMigration = 1500;
 					};
 					E352047E2B4E97D0006C09A1 = {
 						CreatedOnToolsVersion = 15.0.1;
@@ -191,6 +195,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E35204902B4E97F8006C09A1 /* APIRequest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -341,6 +346,7 @@
 		E352048A2B4E97D0006C09A1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -363,6 +369,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -371,6 +378,7 @@
 		E352048B2B4E97D0006C09A1 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -401,6 +409,7 @@
 		E352048D2B4E97D0006C09A1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -416,6 +425,7 @@
 		E352048E2B4E97D0006C09A1 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;

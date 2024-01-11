@@ -13,6 +13,6 @@ Pod::Spec.new do |spec|
   spec.author             = { "ThanhNTH" => "thanhnh.hpvn@gmail.com" }
   spec.source       = { :git => "https://github.com/hathanhds/linkid_ios_sdk.git", :tag => "0.0.1" }
   spec.swift_version = "5.0" 
-  spec.source_files  = 'LinkIDSDK'
+  spec.source_files  = "LinkIDSDK"
   spec.exclude_files = "Classes/Exclude"
 end

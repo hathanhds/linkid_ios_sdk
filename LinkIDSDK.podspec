@@ -1,18 +1,60 @@
 
-Pod::Spec.new do |spec|
+# Pod::Spec.new do |spec|
 
-  spec.name         = "LinkIDSDK"
-  spec.version      = "0.0.1"
-  spec.summary      = "A short description of LinkIDSDK."
-  spec.description  = "A complete description of LinkIDSDK."
-  # spec.platform     = :ios
-  spec.platform     = :ios, "13.0"
+#   spec.name         = "LinkIDSDK"
+#   spec.version      = "0.0.1"
+#   spec.summary      = "A short description of LinkIDSDK."
+#   spec.description  = "A complete description of LinkIDSDK."
+#   # spec.platform     = :ios
+#   spec.platform     = :ios, "12.0"
 
-  spec.homepage     = "https://github.com/hathanhds/linkid_ios_sdk"
-  spec.license      = "MIT"
-  spec.author             = { "ThanhNTH" => "thanhnh.hpvn@gmail.com" }
-  spec.source       = { :git => "https://github.com/hathanhds/linkid_ios_sdk.git", :tag => "0.0.1" }
-  spec.swift_version = "5.0" 
-  spec.source_files  = "LinkIDSDK"
-  spec.exclude_files = "Classes/Exclude"
-end
+#   spec.homepage     = "https://github.com/hathanhds/linkid_ios_sdk"
+#   spec.license      = "MIT"
+#   spec.author             = { "ThanhNTH" => "thanhnh.hpvn@gmail.com" }
+#   spec.source       = { :git => "https://github.com/hathanhds/linkid_ios_sdk.git", :tag => "0.0.1" }
+#   spec.swift_version = "5.0" 
+#   spec.source_files  = "LinkIDSDK"
+#   spec.exclude_files = "Classes/Exclude"
+# end
+
+
+Pod::Spec.new do |s|
+
+  # 1
+  s.platform = :ios
+  s.ios.deployment_target = '12.0'
+  s.name = "LinkIDSDK"
+  s.summary = "LinkIDSDK lets a user exchange vocuher"
+  s.requires_arc = true
+  
+  # 2
+  s.version = "0.0.1"
+  
+  # 3
+  s.license = { :type => "MIT", :file => "LICENSE" }
+  
+  # 4
+  s.author = { "ThanhNTH" => "thanhnh.hpvn@gmail.com" }
+  
+  # 5 
+  s.homepage = "https://github.com/hathanhds/linkid_ios_sdk"
+  
+  # 6
+  s.source = { :git => "https://github.com/hathanhds/linkid_ios_sdk.git", 
+               :tag => "#{s.version}" }
+  
+  # 7
+  s.framework = "UIKit"
+  s.dependency 'Alamofire', '~> 4.7'
+  s.dependency 'SVProgressHUD', '~> 2.2.5'
+  
+  # 8
+  s.source_files = "LinkIDSDK/**/*.{swift}"
+  
+  # 9
+  s.resources = "LinkIDSDK/**/*.{png,jpeg,jpg,storyboard,xib,xcassets}"
+  
+  # 10
+  s.swift_version = "4.2"
+  
+  end

@@ -7,14 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E316DEA42B4FE6BD00B3AD80 /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E316DEA12B4FE6BC00B3AD80 /* FirstViewController.swift */; };
-		E316DEA52B4FE6BD00B3AD80 /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E316DEA22B4FE6BD00B3AD80 /* SecondViewController.swift */; };
-		E316DEA62B4FE6BD00B3AD80 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E316DEA32B4FE6BD00B3AD80 /* Main.storyboard */; };
-		E316DEA82B4FE70C00B3AD80 /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = E316DEA72B4FE70C00B3AD80 /* Common.swift */; };
+		DAEB1772A1B82A1F01D34C6B /* Pods_LinkIDSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49046A21D7F3AA85497052A1 /* Pods_LinkIDSDK.framework */; };
 		E35204802B4E97D0006C09A1 /* LinkIDSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E35204772B4E97CF006C09A1 /* LinkIDSDK.framework */; };
 		E35204852B4E97D0006C09A1 /* LinkIDSDKTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E35204842B4E97D0006C09A1 /* LinkIDSDKTests.swift */; };
 		E35204862B4E97D0006C09A1 /* LinkIDSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = E352047A2B4E97CF006C09A1 /* LinkIDSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E35204902B4E97F8006C09A1 /* APIRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E352048F2B4E97F8006C09A1 /* APIRequest.swift */; };
+		E35D41062BC0006200B50097 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = E35D41012BC0006200B50097 /* Config.swift */; };
+		E35D41072BC0006200B50097 /* Screen1ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E35D41032BC0006200B50097 /* Screen1ViewController.swift */; };
+		E35D41082BC0006200B50097 /* Screen2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E35D41042BC0006200B50097 /* Screen2ViewController.swift */; };
+		E35D41092BC0006200B50097 /* Custom.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E35D41052BC0006200B50097 /* Custom.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -28,15 +28,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		E316DEA12B4FE6BC00B3AD80 /* FirstViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirstViewController.swift; sourceTree = "<group>"; };
-		E316DEA22B4FE6BD00B3AD80 /* SecondViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecondViewController.swift; sourceTree = "<group>"; };
-		E316DEA32B4FE6BD00B3AD80 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
-		E316DEA72B4FE70C00B3AD80 /* Common.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Common.swift; sourceTree = "<group>"; };
+		2D38847D00BC58B4B174A7F1 /* Pods-LinkIDSDK.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LinkIDSDK.release.xcconfig"; path = "Target Support Files/Pods-LinkIDSDK/Pods-LinkIDSDK.release.xcconfig"; sourceTree = "<group>"; };
+		49046A21D7F3AA85497052A1 /* Pods_LinkIDSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LinkIDSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		595A9AEBEC52A31936996036 /* Pods-LinkIDSDK.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LinkIDSDK.debug.xcconfig"; path = "Target Support Files/Pods-LinkIDSDK/Pods-LinkIDSDK.debug.xcconfig"; sourceTree = "<group>"; };
 		E35204772B4E97CF006C09A1 /* LinkIDSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LinkIDSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E352047A2B4E97CF006C09A1 /* LinkIDSDK.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LinkIDSDK.h; sourceTree = "<group>"; };
 		E352047F2B4E97D0006C09A1 /* LinkIDSDKTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LinkIDSDKTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E35204842B4E97D0006C09A1 /* LinkIDSDKTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkIDSDKTests.swift; sourceTree = "<group>"; };
-		E352048F2B4E97F8006C09A1 /* APIRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIRequest.swift; sourceTree = "<group>"; };
+		E35D41012BC0006200B50097 /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
+		E35D41032BC0006200B50097 /* Screen1ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Screen1ViewController.swift; sourceTree = "<group>"; };
+		E35D41042BC0006200B50097 /* Screen2ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Screen2ViewController.swift; sourceTree = "<group>"; };
+		E35D41052BC0006200B50097 /* Custom.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Custom.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -44,6 +46,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DAEB1772A1B82A1F01D34C6B /* Pods_LinkIDSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -58,12 +61,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		09BCD0855F1BA7EE85978D62 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				595A9AEBEC52A31936996036 /* Pods-LinkIDSDK.debug.xcconfig */,
+				2D38847D00BC58B4B174A7F1 /* Pods-LinkIDSDK.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		E352046D2B4E97CF006C09A1 = {
 			isa = PBXGroup;
 			children = (
 				E35204792B4E97CF006C09A1 /* LinkIDSDK */,
 				E35204832B4E97D0006C09A1 /* LinkIDSDKTests */,
 				E35204782B4E97CF006C09A1 /* Products */,
+				09BCD0855F1BA7EE85978D62 /* Pods */,
+				EB41B59DB4A2CD0FB15F08D1 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -79,12 +93,10 @@
 		E35204792B4E97CF006C09A1 /* LinkIDSDK */ = {
 			isa = PBXGroup;
 			children = (
-				E316DEA12B4FE6BC00B3AD80 /* FirstViewController.swift */,
-				E316DEA32B4FE6BD00B3AD80 /* Main.storyboard */,
-				E316DEA22B4FE6BD00B3AD80 /* SecondViewController.swift */,
+				E35D41012BC0006200B50097 /* Config.swift */,
+				E35D41052BC0006200B50097 /* Custom.storyboard */,
+				E35D41022BC0006200B50097 /* Screen */,
 				E352047A2B4E97CF006C09A1 /* LinkIDSDK.h */,
-				E352048F2B4E97F8006C09A1 /* APIRequest.swift */,
-				E316DEA72B4FE70C00B3AD80 /* Common.swift */,
 			);
 			path = LinkIDSDK;
 			sourceTree = "<group>";
@@ -95,6 +107,23 @@
 				E35204842B4E97D0006C09A1 /* LinkIDSDKTests.swift */,
 			);
 			path = LinkIDSDKTests;
+			sourceTree = "<group>";
+		};
+		E35D41022BC0006200B50097 /* Screen */ = {
+			isa = PBXGroup;
+			children = (
+				E35D41032BC0006200B50097 /* Screen1ViewController.swift */,
+				E35D41042BC0006200B50097 /* Screen2ViewController.swift */,
+			);
+			path = Screen;
+			sourceTree = "<group>";
+		};
+		EB41B59DB4A2CD0FB15F08D1 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				49046A21D7F3AA85497052A1 /* Pods_LinkIDSDK.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -115,6 +144,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E35204892B4E97D0006C09A1 /* Build configuration list for PBXNativeTarget "LinkIDSDK" */;
 			buildPhases = (
+				9F0A1740BDE05B262E53EA78 /* [CP] Check Pods Manifest.lock */,
 				E35204722B4E97CF006C09A1 /* Headers */,
 				E35204732B4E97CF006C09A1 /* Sources */,
 				E35204742B4E97CF006C09A1 /* Frameworks */,
@@ -190,7 +220,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E316DEA62B4FE6BD00B3AD80 /* Main.storyboard in Resources */,
+				E35D41092BC0006200B50097 /* Custom.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -203,15 +233,39 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		9F0A1740BDE05B262E53EA78 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-LinkIDSDK-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		E35204732B4E97CF006C09A1 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E316DEA82B4FE70C00B3AD80 /* Common.swift in Sources */,
-				E316DEA52B4FE6BD00B3AD80 /* SecondViewController.swift in Sources */,
-				E35204902B4E97F8006C09A1 /* APIRequest.swift in Sources */,
-				E316DEA42B4FE6BD00B3AD80 /* FirstViewController.swift in Sources */,
+				E35D41072BC0006200B50097 /* Screen1ViewController.swift in Sources */,
+				E35D41062BC0006200B50097 /* Config.swift in Sources */,
+				E35D41082BC0006200B50097 /* Screen2ViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -361,6 +415,7 @@
 		};
 		E352048A2B4E97D0006C09A1 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 595A9AEBEC52A31936996036 /* Pods-LinkIDSDK.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -386,13 +441,14 @@
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
 		E352048B2B4E97D0006C09A1 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2D38847D00BC58B4B174A7F1 /* Pods-LinkIDSDK.release.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -417,7 +473,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

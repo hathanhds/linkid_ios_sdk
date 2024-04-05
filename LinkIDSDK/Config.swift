@@ -10,7 +10,7 @@ import UIKit
 public class Config {
 
     public static func initSDK(presentAction: ((_ vc: UIViewController) -> Void)) {
-        let frameworkBundle = Bundle(identifier: "com.test.SDKTest")
+        let frameworkBundle = Bundle(identifier: "com.test.linkid.sdk")
         let storyboard = UIStoryboard(name: "Custom", bundle: frameworkBundle)
         let vc = storyboard.instantiateViewController(withIdentifier: "Screen1ViewController")
         presentAction(vc)

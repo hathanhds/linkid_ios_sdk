@@ -7,6 +7,17 @@ target 'LinkIDSDK' do
   use_frameworks!
   
   pod 'SVProgressHUD', '~> 2.2.5', :modular_headers => true
+  pod 'RxCocoa'
+  pod 'Moya/RxSwift'
+  pod 'SDWebImage', '~> 5.18.10', :modular_headers => true
+  pod 'ImageSlideshow',  '~> 1.9.2'
+  pod 'iCarousel', '~> 1.8.3', :modular_headers => true
+  pod 'SkeletonView'
+  pod 'IQKeyboardManagerSwift'
+  pod 'SVProgressHUD', :modular_headers => true
+  pod 'SwiftyAttributes'
+  pod 'Tabman', '~> 3.0'
+  pod "EasyTipView"
   
   #inherit! :search_paths
   

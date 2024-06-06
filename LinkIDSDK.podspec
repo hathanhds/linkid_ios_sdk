@@ -26,14 +26,25 @@ Pod::Spec.new do |s|
   
   # 7
   s.framework = "UIKit"
-  s.dependency 'Alamofire', '~> 4.7'
   s.dependency 'SVProgressHUD', '~> 2.2.5'
+  s.dependency 'RxCocoa'
+  s.dependency 'Moya/RxSwift'
+  s.dependency 'SDWebImage', '~> 5.18.10'
+  s.dependency 'ImageSlideshow', '~> 1.9.2'
+  s.dependency 'iCarousel', '~> 1.8.3'
+  s.dependency 'SkeletonView'
+  s.dependency 'IQKeyboardManagerSwift'
+  s.dependency 'SVProgressHUD'
+  s.dependency 'SwiftyAttributes'
+  s.dependency 'Tabman', '~> 3.0'
+  s.dependency 'EasyTipView'
+  s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
   
   # 8
   s.source_files = "LinkIDSDK/**/*.{swift}"
   
   # 9
-  s.resources = "LinkIDSDK/**/*.{png,jpeg,jpg,storyboard,xib,xcassets}"
+  s.resources = "LinkIDSDK/**/*.{png,jpeg,jpg,storyboard,xib,xcassets,ttf}"
   
   # 10
   s.swift_version = "4.2"

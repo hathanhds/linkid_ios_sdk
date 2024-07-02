@@ -21,10 +21,6 @@
         <scene sceneID="JzU-nf-lg4">
             <objects>
                 <viewController storyboardIdentifier="AnonymousViewController" id="OOf-sf-TrY" customClass="AnonymousViewController" customModule="LynkID" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="Xvn-tL-3O2"/>
-                        <viewControllerLayoutGuide type="bottom" id="PWb-u2-xIM"/>
-                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="06i-ik-3gm">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -79,19 +75,19 @@
                                 </state>
                             </button>
                         </subviews>
-                        <viewLayoutGuide key="safeArea" id="oze-YE-IWI"/>
+                        <viewLayoutGuide key="safeArea" id="qvM-KA-s1F"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="f3I-to-TNc" firstAttribute="top" secondItem="uCS-j7-EIp" secondAttribute="bottom" constant="20" id="5xW-b2-kPf"/>
                             <constraint firstItem="uCS-j7-EIp" firstAttribute="top" secondItem="bRm-BH-LQ8" secondAttribute="bottom" constant="20" id="9yf-wI-I4h"/>
-                            <constraint firstAttribute="trailing" secondItem="uCS-j7-EIp" secondAttribute="trailing" constant="16" id="KhV-3t-xIo"/>
-                            <constraint firstItem="uCS-j7-EIp" firstAttribute="leading" secondItem="06i-ik-3gm" secondAttribute="leading" constant="16" id="L2p-kH-xL7"/>
+                            <constraint firstItem="qvM-KA-s1F" firstAttribute="trailing" secondItem="uCS-j7-EIp" secondAttribute="trailing" constant="16" id="KhV-3t-xIo"/>
+                            <constraint firstItem="uCS-j7-EIp" firstAttribute="leading" secondItem="qvM-KA-s1F" secondAttribute="leading" constant="16" id="L2p-kH-xL7"/>
                             <constraint firstItem="Qcy-b1-l84" firstAttribute="trailing" secondItem="f3I-to-TNc" secondAttribute="trailing" id="Op8-TO-U7F"/>
-                            <constraint firstItem="f3I-to-TNc" firstAttribute="centerX" secondItem="06i-ik-3gm" secondAttribute="centerX" id="cov-lI-Bsr"/>
+                            <constraint firstItem="f3I-to-TNc" firstAttribute="centerX" secondItem="qvM-KA-s1F" secondAttribute="centerX" id="cov-lI-Bsr"/>
                             <constraint firstItem="Qcy-b1-l84" firstAttribute="top" secondItem="f3I-to-TNc" secondAttribute="bottom" constant="8" id="rIX-Ss-4pa"/>
                             <constraint firstItem="Qcy-b1-l84" firstAttribute="leading" secondItem="f3I-to-TNc" secondAttribute="leading" id="sc0-qx-Pdp"/>
                             <constraint firstItem="bRm-BH-LQ8" firstAttribute="centerY" secondItem="06i-ik-3gm" secondAttribute="centerY" constant="-100" id="t4g-ix-ecj"/>
-                            <constraint firstItem="bRm-BH-LQ8" firstAttribute="centerX" secondItem="06i-ik-3gm" secondAttribute="centerX" id="vE4-GY-gRi"/>
+                            <constraint firstItem="bRm-BH-LQ8" firstAttribute="centerX" secondItem="qvM-KA-s1F" secondAttribute="centerX" id="vE4-GY-gRi"/>
                         </constraints>
                     </view>
                     <connections>
@@ -106,10 +102,6 @@
         <scene sceneID="qJJ-wN-Vsa">
             <objects>
                 <viewController storyboardIdentifier="InstallAppPopupViewController" id="OxX-lR-4hl" customClass="InstallAppPopupViewController" customModule="LynkID" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="7j6-sV-2oM"/>
-                        <viewControllerLayoutGuide type="bottom" id="uRA-md-xhX"/>
-                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="B4i-41-x5p">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -162,26 +154,26 @@
                                 </userDefinedRuntimeAttributes>
                             </button>
                         </subviews>
-                        <viewLayoutGuide key="safeArea" id="R8D-Eq-hvj"/>
+                        <viewLayoutGuide key="safeArea" id="2Js-Lk-Yj0"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="2I8-J9-ixt" firstAttribute="centerY" secondItem="B4i-41-x5p" secondAttribute="centerY" constant="30" id="4lg-00-dC0"/>
                             <constraint firstAttribute="bottom" secondItem="vy5-Uc-5Be" secondAttribute="bottom" id="5rW-zF-fNz"/>
-                            <constraint firstItem="JmV-ti-Jvz" firstAttribute="top" secondItem="7j6-sV-2oM" secondAttribute="bottom" id="A8y-V3-eqK"/>
-                            <constraint firstAttribute="trailing" secondItem="tKm-Cr-m6w" secondAttribute="trailing" constant="16" id="EUI-hB-pm6"/>
-                            <constraint firstItem="JmV-ti-Jvz" firstAttribute="leading" secondItem="B4i-41-x5p" secondAttribute="leading" id="Gpw-fG-7hD"/>
-                            <constraint firstItem="tKm-Cr-m6w" firstAttribute="leading" secondItem="B4i-41-x5p" secondAttribute="leading" constant="16" id="K15-ga-nGz"/>
+                            <constraint firstItem="JmV-ti-Jvz" firstAttribute="top" secondItem="2Js-Lk-Yj0" secondAttribute="top" id="A8y-V3-eqK"/>
+                            <constraint firstItem="2Js-Lk-Yj0" firstAttribute="trailing" secondItem="tKm-Cr-m6w" secondAttribute="trailing" constant="16" id="EUI-hB-pm6"/>
+                            <constraint firstItem="JmV-ti-Jvz" firstAttribute="leading" secondItem="2Js-Lk-Yj0" secondAttribute="leading" id="Gpw-fG-7hD"/>
+                            <constraint firstItem="tKm-Cr-m6w" firstAttribute="leading" secondItem="2Js-Lk-Yj0" secondAttribute="leading" constant="16" id="K15-ga-nGz"/>
                             <constraint firstItem="vy5-Uc-5Be" firstAttribute="top" secondItem="B4i-41-x5p" secondAttribute="top" id="N4P-rf-eDx"/>
-                            <constraint firstItem="vy5-Uc-5Be" firstAttribute="leading" secondItem="B4i-41-x5p" secondAttribute="leading" id="QcY-WA-juo"/>
+                            <constraint firstItem="vy5-Uc-5Be" firstAttribute="leading" secondItem="2Js-Lk-Yj0" secondAttribute="leading" id="QcY-WA-juo"/>
                             <constraint firstItem="ipQ-ab-JsP" firstAttribute="leading" secondItem="tKm-Cr-m6w" secondAttribute="leading" id="ThZ-pg-0LI"/>
-                            <constraint firstAttribute="trailing" secondItem="vy5-Uc-5Be" secondAttribute="trailing" id="TzB-cL-Drh"/>
-                            <constraint firstAttribute="trailing" secondItem="GFV-Vn-f2X" secondAttribute="trailing" constant="16" id="aZO-QT-Lui"/>
+                            <constraint firstItem="2Js-Lk-Yj0" firstAttribute="trailing" secondItem="vy5-Uc-5Be" secondAttribute="trailing" id="TzB-cL-Drh"/>
+                            <constraint firstItem="2Js-Lk-Yj0" firstAttribute="trailing" secondItem="GFV-Vn-f2X" secondAttribute="trailing" constant="16" id="aZO-QT-Lui"/>
                             <constraint firstItem="ipQ-ab-JsP" firstAttribute="top" secondItem="tKm-Cr-m6w" secondAttribute="bottom" constant="8" id="dtn-S1-3O8"/>
-                            <constraint firstItem="uRA-md-xhX" firstAttribute="top" secondItem="GFV-Vn-f2X" secondAttribute="bottom" constant="32" id="fpi-eP-6od"/>
+                            <constraint firstItem="2Js-Lk-Yj0" firstAttribute="bottom" secondItem="GFV-Vn-f2X" secondAttribute="bottom" constant="32" id="fpi-eP-6od"/>
                             <constraint firstItem="tKm-Cr-m6w" firstAttribute="top" secondItem="JmV-ti-Jvz" secondAttribute="bottom" id="otu-7N-fKx"/>
                             <constraint firstItem="ipQ-ab-JsP" firstAttribute="trailing" secondItem="tKm-Cr-m6w" secondAttribute="trailing" id="thF-F7-EJc"/>
-                            <constraint firstItem="GFV-Vn-f2X" firstAttribute="leading" secondItem="B4i-41-x5p" secondAttribute="leading" constant="16" id="y1k-C6-8Vx"/>
-                            <constraint firstItem="2I8-J9-ixt" firstAttribute="centerX" secondItem="B4i-41-x5p" secondAttribute="centerX" id="ygy-yb-qcV"/>
+                            <constraint firstItem="GFV-Vn-f2X" firstAttribute="leading" secondItem="2Js-Lk-Yj0" secondAttribute="leading" constant="16" id="y1k-C6-8Vx"/>
+                            <constraint firstItem="2I8-J9-ixt" firstAttribute="centerX" secondItem="2Js-Lk-Yj0" secondAttribute="centerX" id="ygy-yb-qcV"/>
                         </constraints>
                     </view>
                     <connections>

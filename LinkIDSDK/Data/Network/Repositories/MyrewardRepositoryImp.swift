@@ -56,4 +56,27 @@ class MyrewardRepositoryImpl: MyrewardRepository {
         }.observe(on: MainScheduler())
     }
 
+    func updateGiftStatus(transactionCode: String) -> Single<BaseResponseModel<String?>> {
+        return Single.create { observer -> Disposable in
+            APIManager.request(target: .updateGiftStatus(transactionCode: transactionCode))
+                .map({ res -> BaseResponseModel<String?> in
+                let data = res.data
+                do {
+                    let model = try data.decoded(type: BaseResponseModel<String?>.self)
+                    return model
+                } catch {
+                    throw APIError.somethingWentWrong
+                }
+            })
+                .subscribe(onSuccess: { model in
+                observer(.success(model))
+            }, onFailure: { error in
+                    observer(.failure(error))
+                })
+                .disposed(by: self.disposeBag)
+
+            return Disposables.create()
+        }.observe(on: MainScheduler())
+    }
+
 }

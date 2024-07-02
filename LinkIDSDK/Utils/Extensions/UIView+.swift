@@ -115,9 +115,13 @@ extension UIView {
         self.removeGradient()
         self.backgroundColor = .clear
 
+        var locations = [0.0, 1.0]
+        if(colors.count == 3){
+            locations = [0.0, 0.5 ,1.0]
+        }
         let gradient = CAGradientLayer()
         gradient.frame = self.bounds
-        gradient.locations = [0.0, 1.0]
+        gradient.locations = locations.map { NSNumber(value: $0) }
         gradient.colors = colors.compactMap({ $0.cgColor })
         gradient.startPoint = direction.startPoint
         gradient.endPoint = direction.endPoint
@@ -208,6 +212,7 @@ extension UIView {
     }
 
     func showIndicator() {
+        self.addIndicator()
         self.activityIndicator?.startAnimating()
     }
 
@@ -259,6 +264,12 @@ extension UIView {
 
     func remove1(border: ViewBorder) {
         layer.sublayers?.compactMap { $0 }.filter { $0.name == border.rawValue }.forEach { $0.removeFromSuperlayer()
+        }
+    }
+    
+    func removeAllSubView() {
+        for view in self.subviews {
+            view.removeFromSuperview()
         }
     }
 
@@ -366,13 +377,6 @@ extension UIView {
 
 
         layer.insertSublayer(shapeLayer, at: 0)
-
-        // Add elevation
-//        layer.shadowColor = UIColor.systemGray.cgColor
-//        layer.shadowOpacity = 0.4
-//        layer.shadowRadius = 10
-//        layer.shadowOffset = .zero
-
-
     }
 }
+

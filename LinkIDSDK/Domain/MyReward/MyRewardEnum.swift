@@ -17,7 +17,7 @@ enum MyRewardType {
 // 2. Chờ xử lý -> Đã hủy
 // 3. Chờ xử lý -> Đang giao hàng -> Vận chuyển trả hàng -> Đã hủy
 
-enum PhysicalRewardStatus {
+enum PhysicalRewardStatus: String, CaseIterable {
     case pending // 1-1 (tiến trình 1 - trạng thái 1)
     case waiting // 1-1
     case delivering // 1-2
@@ -65,4 +65,14 @@ struct ProgressInfo {
     }
 }
 
+enum EgiftRewardStatus: String {
+    case used = "U"
+    case expired = "E"
+    case redeemed = "R"
+}
 
+enum WhyHaveRewardType: String {
+    case sent = "SENT"
+    case bought = "BOUGHT"
+    case received = "RECEIVED"
+}

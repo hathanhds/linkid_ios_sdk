@@ -11,6 +11,10 @@ enum DateFormatterType {
     case ddMMyyyy
     case yyyyMMdd
     case yyyyMMddThhmmss
+    case yyyyMMddThhmmssSSZ
+    case HHmmddMMyyyy
+    case HHmm_ddMM
+    case HHmm_ddMMYYYY
 
     var value: String {
         switch(self) {
@@ -20,6 +24,14 @@ enum DateFormatterType {
             return "yyyy-MM-dd"
         case .yyyyMMddThhmmss:
             return "yyyy-MM-dd'T'HH:mm:ssZ"
+        case .yyyyMMddThhmmssSSZ:
+            return "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+        case .HHmmddMMyyyy:
+            return "HH:mm - dd/MM/yyyy"
+        case .HHmm_ddMM:
+            return "HH:mm - dd/MM"
+        case .HHmm_ddMMYYYY:
+            return "HH:mm - dd/MM/yyyy"
         }
     }
 }
@@ -55,4 +67,10 @@ extension Date {
         let seconds = TimeInterval(timezone.secondsFromGMT(for: self))
         return Date(timeInterval: seconds, since: self)
     }
+}
+
+extension Date {
+    func currentTimeMillis() -> Int64 {
+            return Int64(self.timeIntervalSince1970 * 1000)
+        }
 }

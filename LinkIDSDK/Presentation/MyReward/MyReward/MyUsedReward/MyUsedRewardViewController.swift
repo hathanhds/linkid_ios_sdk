@@ -129,7 +129,7 @@ extension MyUsedRewardViewController: UITableViewDataSource, UITableViewDelegate
         let cell = tableView.dequeueCell(ofType: MyRewardTableViewCell.self, for: indexPath)
         let gift = viewModel.output.listReward.value[indexPath.row]
         cell.selectionStyle = .none
-        cell.setDataForCell(data: gift)
+        cell.setDataForCell(data: gift, isUsedGift: true)
         return cell
     }
 
@@ -147,13 +147,18 @@ extension MyUsedRewardViewController: UITableViewDataSource, UITableViewDelegate
     // MARK: - Delegate
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // TODO: thanh - Open Gift detail screen
         let gift = viewModel.output.listReward.value[indexPath.row]
-        self.navigator.show(segue: .egiftRewardDetail(giftInfo: gift, giftTransactionCode: gift.giftTransaction?.code ?? "")) { [weak self] vc in
-            guard let self = self else { return }
-            self.navigationController?.pushViewController(vc, animated: true)
-        }
-    }
+        if let _ = gift.eGift {
+            self.navigator.show(segue: .egiftRewardDetail(giftInfo: gift, giftTransactionCode: gift.giftTransaction?.code ?? "")) { [weak self] vc in
+                guard let self = self else { return }
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
+        } else {
+            self.navigator.show(segue: .physicalRewardDetail(giftInfo: gift, giftTransactionCode: gift.giftTransaction?.code ?? "")) { [weak self] vc in
+                guard let self = self else { return }
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
+        } }
 }
 
 extension MyUsedRewardViewController: UIScrollViewDelegate {

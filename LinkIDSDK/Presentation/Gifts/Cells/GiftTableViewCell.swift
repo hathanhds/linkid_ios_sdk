@@ -43,7 +43,7 @@ class GiftTableViewCell: UITableViewCell {
     }
 
     func setDataForCell(data: GiftInfoItem) {
-        giftImageView.setSDImage(with: data.imageLinks?.first?.fullLink ?? "")
+        giftImageView.setSDImage(with: data.imageLink?.first?.fullLink ?? "")
         let giftInfor = data.giftInfor
 
         let giftDiscountInfor = data.giftDiscountInfor;
@@ -51,18 +51,17 @@ class GiftTableViewCell: UITableViewCell {
         let requiredCoin = giftInfor?.requiredCoin;
         let salePrice = giftDiscountInfor?.salePrice;
         let displayPrice = salePrice ?? requiredCoin ?? 0;
-        let reductionRateDisplay = giftDiscountInfor?.reductionRateDisplay ??
-        giftInfor?.discountPrice ??
-        0;
+        let reductionRateDisplay = Int(giftDiscountInfor?.reductionRateDisplay ??
+            giftInfor?.discountPrice ??
+            0)
         let isShowDiscount = reductionRateDisplay > 0;
 
         discountPercentButton.setTitle("- \(reductionRateDisplay)%", for: .normal)
         discountPercentButton.isHidden = reductionRateDisplay == 0
         priceLabel.text = displayPrice.formatter()
         fullPriceLabel.text = fullPrice.formatter()
-        fullPriceLabel.isHidden = fullPrice < displayPrice || fullPrice == displayPrice
-
-
+        fullPriceLabel.isHidden = fullPrice - displayPrice <= 0
+        titleLabel.text = giftInfor?.name
     }
 
 }

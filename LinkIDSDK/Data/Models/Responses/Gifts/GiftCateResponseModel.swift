@@ -19,15 +19,18 @@ struct GiftCateResultModel: Codable {
 }
 
 struct GiftCategory: ModelType {
-
     var code: String?
     var name: String?
+    var descTitle: String?
+    var descContent: String?
     var fullLink: String?
     var categoryTypeCode: String?
 
-    init(code: String? = nil, name: String? = nil, fullLink: String? = nil, categoryTypeCode: String? = nil) {
+    init(code: String? = nil, name: String? = nil, descTitle: String? = nil, descContent: String? = nil, fullLink: String? = nil, categoryTypeCode: String? = nil) {
         self.code = code
         self.name = name
+        self.descTitle = descTitle
+        self.descContent = descContent
         self.fullLink = fullLink
         self.categoryTypeCode = categoryTypeCode
     }

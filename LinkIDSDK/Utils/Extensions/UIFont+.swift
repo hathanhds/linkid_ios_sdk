@@ -38,5 +38,12 @@ extension UIFont {
     // MARK: - regular
     static let f12r = UIFont(name: FontName.regular, size: 12)
     static let f12s = UIFont(name: FontName.semiBold, size: 12)
+    
+    static let f14r = UIFont(name: FontName.regular, size: 14)
+    static let f14s = UIFont(name: FontName.semiBold, size: 14)
+    
+    static let f18s = UIFont(name: FontName.semiBold, size: 18)
+    
+    static let f20s = UIFont(name: FontName.semiBold, size: 20)
 }
 

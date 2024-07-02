@@ -8,6 +8,7 @@
 import UIKit
 import WebKit
 import EasyTipView
+import SwiftyAttributes
 
 class EgiftRewardDetailViewController: BaseViewController {
 
@@ -20,28 +21,51 @@ class EgiftRewardDetailViewController: BaseViewController {
 
     @IBOutlet weak var _ticketView: UIView!
     @IBOutlet weak var _installAppView: UIView!
+    @IBOutlet weak var stackContainerView: UIStackView!
+    @IBOutlet weak var headerView: UIView!
+    @IBOutlet weak var scrollView: UIScrollView!
 
     @IBOutlet weak var egiftCodeContainerView: UIView!
-    @IBOutlet weak var egiftCodeContainerViewHeightConstant: NSLayoutConstraint!
+    @IBOutlet weak var brandImageView: UIImageView!
 
-    @IBOutlet weak var presentTitleView: UIView!
-    @IBOutlet weak var expiredDateInfoButton: UIButton!
+    // Redeem Egift View
 
-    // ExtraView
-    @IBOutlet var hiddenEgiftView: UIView!
-    @IBOutlet var egiftCodeView: UIView!
+    @IBOutlet weak var redeemStackView: UIStackView!
+    @IBOutlet weak var redeemCodeLabel: UILabel!
+    @IBOutlet weak var redeemSerialLabel: UILabel!
+    @IBOutlet weak var memberNameFromLabel: UILabel!
     @IBOutlet weak var sendGiftButton: UIButton!
     @IBOutlet weak var useButton: UIButton!
+    @IBOutlet weak var redeemSerialStackView: UIStackView!
 
+    // Used Egift
+    @IBOutlet weak var usedStackView: UIStackView!
+    @IBOutlet weak var qrCodeImageView: UIImageView!
+    @IBOutlet weak var usedCodeLabel: UILabel!
+    @IBOutlet weak var effectiveDateLabel: UILabel!
+    @IBOutlet weak var noteLabel: UILabel!
+    @IBOutlet weak var usedSerialLabel: UILabel!
+    @IBOutlet weak var qrCodeContainerView: UIView!
+    @IBOutlet weak var usedCodeContainerView: UIView!
+    @IBOutlet weak var usedSerialContainerView: UIView!
+    @IBOutlet weak var reorderButton: UIButton!
+
+    // Header info
+    @IBOutlet weak var presentTitleView: UIView!
+    @IBOutlet weak var expiredDateInfoButton: UIButton!
+    @IBOutlet weak var giftNameLabel: UILabel!
+    @IBOutlet weak var expiredDateLabel: UILabel!
     // Mô tả chung
     @IBOutlet weak var giftInfoContainerView: UIView!
     @IBOutlet weak var descriptionStackView: UIStackView!
+    @IBOutlet weak var descriptionWebViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var descriptionWebView: WKWebView!
-    @IBOutlet weak var webviewHeightConstraint: NSLayoutConstraint!
 
     //Hướng dẫn
     @IBOutlet weak var instructionContainerView: UIStackView!
-    @IBOutlet weak var instructionLabel: UILabel!
+    @IBOutlet weak var instructionWebView: WKWebView!
+    @IBOutlet weak var instructionWebViewHeightConstraint: NSLayoutConstraint!
+
     // Liên hệ
     @IBOutlet weak var contactContainerView: UIStackView!
     @IBOutlet weak var emailContainerView: UIView!
@@ -50,7 +74,9 @@ class EgiftRewardDetailViewController: BaseViewController {
     @IBOutlet weak var hotlineButton: UIButton!
     // Điều kiện sử dụng
     @IBOutlet weak var conditionContainerView: UIView!
-    @IBOutlet weak var conditionLabel: UILabel!
+    @IBOutlet weak var conditionWebView: WKWebView!
+    @IBOutlet weak var conditionWebViewHeightConstraint: NSLayoutConstraint!
+
     // Địa điểm áp dụng
     @IBOutlet weak var locationContainerView: UIView!
     @IBOutlet weak var locationTableView: UITableView!
@@ -59,12 +85,14 @@ class EgiftRewardDetailViewController: BaseViewController {
 
 
     var viewModel: EgiftRewardDetailViewModel!
-    let headString = "<head><meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no'></head>"
-    private var isInjected: Bool = false
-    var tipView: EasyTipView!
+
+    private var isInjectedDescriptionWebView: Bool = false
+    private var isInjectedInstructionWebView: Bool = false
+    private var isInjectedConditionWebView: Bool = false
+
+    var tipView = EasyTipView(text: "")
     var counter = 0
     var timer = Timer()
-
     override func viewDidLoad() {
         super.viewDidLoad()
         viewModel.input.viewDidLoad.onNext(())
@@ -101,104 +129,262 @@ class EgiftRewardDetailViewController: BaseViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         DispatchQueue.main.async { [weak self] in
-            self?._ticketView.drawTicket(
+            guard let self = self else { return }
+            _ticketView.drawTicket(
                 directionHorizontal: false,
                 withCutoutRadius: 10,
                 andCornerRadius: 12,
                 fillColor: UIColor.white,
-                andFrame: CGRect(x: 0, y: 0, width: self!._ticketView.frame.size.width, height: self!._ticketView.frame.size.height),
-                andTicketPosition: CGPoint(x: self!._ticketView.frame.size.width, y: 180))
+                andFrame: CGRect(x: 0, y: 0, width: _ticketView.frame.size.height, height: _ticketView.frame.size.height),
+                andTicketPosition: CGPoint(x: _ticketView.frame.size.width, y: viewModel.caculateTicketPosition()))
         }
 
         useButton.setCommonGradient()
+        headerView.setCommonGradient()
+
+        // Label quà tặng
+        presentTitleView.layer.masksToBounds = true
+        presentTitleView.layer.cornerRadius = 12
+        presentTitleView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMinYCorner]
         presentTitleView.setCommonGradient()
-
-        egiftContainerSubAddView(view: egiftCodeView)
-    }
-
-    func egiftContainerSubAddView(view: UIView) {
-        egiftCodeContainerView.addSubview(view)
-        view.center = CGPoint(x: egiftCodeView.bounds.midX, y: egiftCodeView.bounds.midY)
-        egiftCodeContainerViewHeightConstant.constant = view.frame.height
     }
 
     override func initView() {
         descriptionWebView.navigationDelegate = self
-        let content = """
-                        <!DOCTYPE html>
-                        <html>
-                        <body>
-                        <p>Older versions of Swift don't allow you to have a single literal over multiple lines but you can add literals together over multiple lines:</p>
-                        <p>My first paragraph.</p>
-                        <p>My first paragraph.</p>
-                        <p>My first paragraph.</p></body></html>
-                        """
-        descriptionWebView.loadHTMLString(content, baseURL: nil)
+        instructionWebView.navigationDelegate = self
+        conditionWebView.navigationDelegate = self
         locationTableView.register(cellType: GiftLocationTableViewCell.self)
-
-        presentTitleView.layer.masksToBounds = false
-        presentTitleView.layer.cornerRadius = 12
-        presentTitleView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMinYCorner]
-
-        setUpEasyView()
+        self.setUpEasyView(tipView: &tipView)
     }
 
     override func bindToView() {
-        // Reward info
-//        viewModel.output.rewardInfo.subscribe(onNext: { [weak self] rewardInfo in
-//            guard let self = self else { return }
-//            if let giftTransaction = rewardInfo?.giftTransaction {
-//                // Giới thiệu
-//                if let description = giftTransaction.description, !description.isEmpty {
-//                    descriptionStackView.isHidden = false
-//
-//                } else {
-//                    descriptionStackView.isHidden = true
-//                }
-//
-//                // Hướng dẫn sử dụng
-//                if let instruction = giftTransaction.introduce, !instruction.isEmpty {
-//                    instructionContainerView.isHidden = false
-//                } else {
-//                    instructionContainerView.isHidden = true
-//                }
-//
-//                // Liên hệ
-//                if (!(giftTransaction.contactHotline ?? "").isEmpty || !(giftTransaction.contactEmail ?? "").isEmpty) {
-//                    contactContainerView.isHidden = false
-//                    if let email = giftTransaction.contactEmail, !email.isEmpty {
-//                        emailContainerView.isHidden = false
-//                        emailButton.setTitle(email, for: .normal)
-//                    } else {
-//                        emailContainerView.isHidden = true
-//                    }
-//                    if let hotline = giftTransaction.contactHotline, !hotline.isEmpty {
-//                        hotlineContainerView.isHidden = false
-//                        hotlineButton.setTitle(hotline, for: .normal)
-//                    } else {
-//                        hotlineContainerView.isHidden = true
-//                    }
-//                } else {
-//                    contactContainerView.isHidden = true
-//                }
-//                // Điều kiện áp dụng
-//                if let condition = giftTransaction.condition {
-//                    conditionContainerView.isHidden = false
-//                    conditionLabel.text = condition
-//                } else {
-//                    conditionContainerView.isHidden = true
-//                }
-//                // Địa điểm áp dụng
-//            } else {
-//                giftInfoContainerView.isHidden = true
-//                contactContainerView.isHidden = true
-//                contactContainerView.isHidden = true
-//                conditionContainerView.isHidden = true
-//                locationContainerView.isHidden = true
-//            }
-//        }).disposed(by: disposeBag)
+        viewModel.output.isLoading.subscribe { [weak self] isLoading in
+            guard let self = self else { return }
+            if (isLoading) {
+                self.stackContainerView.isHidden = true
+                self.showLoading()
+            } else {
+                self.stackContainerView.isHidden = false
+                self.hideLoading()
+            }
+        }.disposed(by: disposeBag)
 
+        // Reward info
+        viewModel.output.giftInfo.subscribe(onNext: { [weak self] giftInfo in
+            guard let self = self else { return }
+            // Ảnh quà
+            let brandImage = giftInfo?.brandInfo?.brandImage
+            brandImageView.setSDImage(with: brandImage, placeholderImage: .imageLogo)
+            if let giftTransaction = giftInfo?.giftTransaction {
+                self.scrollView.isHidden = false
+                setUpEGiftCodeView(giftInfo: giftInfo)
+                // Header info
+                giftNameLabel.text = giftTransaction.giftName
+                let dateInfo = viewModel.displaydDateInfo(giftInfo: giftInfo)
+                expiredDateLabel.text = dateInfo.title
+                expiredDateLabel.textColor = dateInfo.color
+                presentTitleView.isHidden = giftTransaction.whyHaveIt != WhyHaveRewardType.received.rawValue
+
+                // Thông tin chung
+                setUpGeneralInfo(giftTransaction)
+
+                // Địa điểm áp dụng
+                if let giftUsageAddress = giftInfo?.giftUsageAddress, giftUsageAddress.count > 0 {
+                    locationContainerView.isHidden = false
+                    loadMoreLocationButton.isHidden = giftUsageAddress.count < 3
+                } else {
+                    loadMoreLocationButton.isHidden = true
+                    locationContainerView.isHidden = true
+                }
+                locationTableView.reloadData()
+            } else {
+                self.scrollView.isHidden = true
+            }
+        }).disposed(by: disposeBag)
+
+        // Update gift status
+        viewModel.output.updateGiftStatusResult.subscribe { [weak self] result in
+            guard let self = self else { return }
+        }.disposed(by: disposeBag)
+        viewModel.output.updateGiftStatusResult.subscribe(onNext: { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success:
+                // Do nothing
+                break
+            case .failure(let res):
+                UtilHelper.showAPIErrorPopUp(navigator: navigator,
+                    parentVC: self,
+                    message: res.message ?? "")
+            }
+        }).disposed(by: disposeBag)
     }
+
+
+    func setUpEGiftCodeView(giftInfo: GiftInfoItem?) {
+        if let usedStatus = giftInfo?.eGift?.usedStatus, let whyHaveIt = giftInfo?.giftTransaction?.whyHaveIt {
+            // Check show egit code view
+            // Redeem egift
+            if usedStatus == EgiftRewardStatus.redeemed.rawValue && whyHaveIt != WhyHaveRewardType.sent.rawValue {
+                setUpRedeemEgiftInfo(giftInfo: giftInfo)
+                redeemStackView.isHidden = false
+                usedStackView.isHidden = true
+            } else {
+                // Used egift
+                setUpUsedEgiftInfo(giftInfo: giftInfo)
+                redeemStackView.isHidden = true
+                usedStackView.isHidden = false
+            }
+        }
+    }
+
+    func setUpRedeemEgiftInfo(giftInfo: GiftInfoItem?) {
+        let giftTransaction = giftInfo?.giftTransaction
+        let code = giftInfo?.eGift?.code
+        let serialNo = giftTransaction?.serialNo
+        if let code = code, !code.isEmpty, viewModel.isShowMarkUsedButton() {
+            redeemCodeLabel.text = code.replacingLastCharacters(with: "XXXX", numberOfReplacedCharacters: 4).uppercased()
+            redeemCodeLabel.isHidden = false
+        } else {
+            redeemCodeLabel.isHidden = true
+        }
+        if let serialNo = serialNo, !serialNo.isEmpty, viewModel.isShowMarkUsedButton() {
+            redeemSerialLabel.text = serialNo.replacingLastCharacters(with: "XXXX", numberOfReplacedCharacters: 4).uppercased()
+            redeemSerialStackView.isHidden = false
+        } else {
+            redeemSerialStackView.isHidden = true
+        }
+
+        // Check show hide Send/Use button
+        if let whyHaveIt = giftInfo?.giftTransaction?.whyHaveIt {
+            sendGiftButton.isHidden = whyHaveIt != WhyHaveRewardType.bought.rawValue
+        }
+        useButton.isHidden = !viewModel.isShowMarkUsedButton()
+    }
+
+    func setUpUsedEgiftInfo(giftInfo: GiftInfoItem?) {
+        let giftTransaction = giftInfo?.giftTransaction
+        let whyHaveIt = giftTransaction?.whyHaveIt
+        let eGift = giftInfo?.eGift
+        brandImageView.image = brandImageView.image?.applyColorFilter()
+        // Gift code
+        if let code = eGift?.code, !code.isEmpty {
+            usedCodeLabel.text = code.uppercased()
+            usedCodeContainerView.isHidden = false
+        } else {
+            usedCodeContainerView.isHidden = true
+        }
+        // Code image
+        if let codeImage = giftTransaction?.qrCode {
+            qrCodeContainerView.isHidden = false
+            qrCodeImageView.setSDImage(with: codeImage)
+        } else {
+            if let code = eGift?.code, !code.isEmpty {
+                qrCodeContainerView.isHidden = false
+                qrCodeImageView.image = UtilHelper.generateQRCode(from: eGift?.code ?? "")
+            } else {
+                qrCodeContainerView.isHidden = true
+            }
+
+        }
+        // Serial no
+        if let serialNo = giftTransaction?.serialNo, !serialNo.isEmpty {
+            usedSerialLabel.text = serialNo.uppercased()
+            usedSerialContainerView.isHidden = false
+        } else {
+            usedSerialContainerView.isHidden = true
+        }
+        if (whyHaveIt == WhyHaveRewardType.sent.rawValue) {
+            usedCodeContainerView.isHidden = true
+            usedSerialContainerView.isHidden = true
+        }
+        // Member name from
+        if let memberNameFrom = giftInfo?.memberNameFrom, !memberNameFrom.isEmpty, whyHaveIt == WhyHaveRewardType.received.rawValue {
+            memberNameFromLabel.text = "Người tặng: \(memberNameFrom)"
+            memberNameFromLabel.isHidden = false
+        } else {
+            memberNameFromLabel.isHidden = true
+        }
+        // Ngày xuất voucher
+        if let effectiveDate = Date.init(fromString: eGift?.expiredDate ?? "", formatter: .yyyyMMddThhmmss)?.toString(formatter: .yyyyMMdd), !effectiveDate.isEmpty {
+            effectiveDateLabel.text = "Ngày xuất voucher: \(effectiveDate)"
+            effectiveDateLabel.isHidden = false
+        } else {
+            effectiveDateLabel.isHidden = true
+        }
+
+        // Lưu ý
+        noteLabel.isHidden = whyHaveIt == WhyHaveRewardType.sent.rawValue
+        let attribute1 = "Lưu ý: ".withAttributes([
+                .textColor(.cF5574E!),
+                .font(.f12s!)
+            ])
+        let attribute2 = "Không cung cấp ảnh chụp màn hình cho nhân viên để thanh toán.".withAttributes([
+                .textColor(.c6D6B7A!),
+                .font(.f12r!),
+            ])
+        noteLabel.attributedText = attribute1 + attribute2
+
+        // Đổi thêm
+        let remainingQuantityOfTheGift = giftInfo?.remainingQuantityOfTheGift ?? 0
+        let isAvailableToRedeemAgain = giftInfo?.isAvailableToRedeemAgain ?? true
+        if (remainingQuantityOfTheGift > 0 && isAvailableToRedeemAgain) {
+            reorderButton.isHidden = false
+        } else {
+            reorderButton.isHidden = true
+        }
+    }
+
+    // Thông tin chung
+    func setUpGeneralInfo(_ giftTransaction: GiftTransaction) {
+        // Giới thiệu
+        if let description = giftTransaction.giftDescription, !description.isEmpty {
+            descriptionStackView.isHidden = false
+            descriptionWebView.loadHTMLStringWith(content: description, baseURL: nil)
+            descriptionWebView.reload()
+
+        } else {
+            descriptionStackView.isHidden = true
+        }
+
+        // Hướng dẫn sử dụng
+        if let introduce = giftTransaction.introduce, !introduce.isEmpty {
+            instructionContainerView.isHidden = false
+            instructionWebView.loadHTMLStringWith(content: introduce, baseURL: nil)
+            instructionWebView.reload()
+        } else {
+            instructionContainerView.isHidden = true
+        }
+
+        // Liên hệ
+        if (!(giftTransaction.contactHotline ?? "").isEmpty || !(giftTransaction.contactEmail ?? "").isEmpty) {
+            contactContainerView.isHidden = false
+            if let email = giftTransaction.contactEmail, !email.isEmpty {
+                emailContainerView.isHidden = false
+                emailButton.setTitle(email, for: .normal)
+            } else {
+                emailContainerView.isHidden = true
+            }
+            if let hotline = giftTransaction.contactHotline, !hotline.isEmpty {
+                hotlineContainerView.isHidden = false
+                hotlineButton.setTitle(hotline, for: .normal)
+            } else {
+                hotlineContainerView.isHidden = true
+            }
+        } else {
+            contactContainerView.isHidden = true
+        }
+        giftInfoContainerView.isHidden = descriptionStackView.isHidden && instructionContainerView.isHidden && contactContainerView.isHidden
+        // Điều kiện áp dụng
+        if let condition = giftTransaction.condition {
+            conditionContainerView.isHidden = false
+            conditionWebView.loadHTMLStringWith(content: condition, baseURL: nil)
+            instructionWebView.reload()
+        } else {
+            conditionContainerView.isHidden = true
+        }
+    }
+
 
 // MARK: -Actions
     @IBAction func onBackPressed(_ sender: Any) {
@@ -215,8 +401,8 @@ class EgiftRewardDetailViewController: BaseViewController {
 
     @IBAction func useGiftAction(_ sender: Any) {
         navigator.show(segue: .markUsed(didFinish: {
-            // TODO: call api Đã sử dụng
-            print("Trượt đã sử dụng và reload data")
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { self.viewModel.updateEgiftStatus()
+            }
         })) { [weak self] vc in
             guard let self = self else { return }
             vc.modalPresentationStyle = .overFullScreen
@@ -226,19 +412,19 @@ class EgiftRewardDetailViewController: BaseViewController {
     }
 
     @IBAction func openEmailAction(_ sender: Any) {
-        if let email = viewModel.output.rewardInfo.value?.giftTransaction?.contactEmail {
+        if let email = viewModel.output.giftInfo.value?.giftTransaction?.contactEmail {
             UtilHelper.openEmail(email: email)
         }
     }
 
     @IBAction func callHotlineAction(_ sender: Any) {
-        if let phone = viewModel.output.rewardInfo.value?.giftTransaction?.contactHotline {
+        if let phone = viewModel.output.giftInfo.value?.giftTransaction?.contactHotline {
             UtilHelper.openPhoneCall(number: phone)
         }
     }
 
     @IBAction func seeMoreLocationAction(_ sender: Any) {
-        self.navigator.show(segue: .giftLocation) { [weak self] vc in
+        self.navigator.show(segue: .giftLocation(giftCode: viewModel.output.giftInfo.value?.giftTransaction?.giftCode ?? "")) { [weak self] vc in
             guard let self = self else { return }
             self.navigationController?.pushViewController(vc, animated: true)
         }
@@ -254,43 +440,65 @@ class EgiftRewardDetailViewController: BaseViewController {
     }
 
     @IBAction func copyGiftCodeAction(_ sender: Any) {
-//        self.showToast(fromView: self._ticketView, type: .success, message: "Sao chép thành công")
-        self.showToast(ofType: .success, withMessage: "Sao chép thành công Sao chép thành côngSao chép thành côngSao chép thành côngSao chép thành công Sao chép thành côngSao chép thành công")
+        let code = viewModel.output.giftInfo.value?.eGift?.code ?? ""
+        UtilHelper.copyToClipboard(text: code) {
+            self.showToast(ofType: .success, withMessage: "Sao chép thành công")
+        }
     }
 
     @IBAction func copySerialAction(_ sender: Any) {
-
+        let code = viewModel.output.giftInfo.value?.giftTransaction?.serialNo ?? ""
+        UtilHelper.copyToClipboard(text: code) {
+            self.showToast(ofType: .success, withMessage: "Sao chép thành công")
+        }
     }
+
+    @IBAction func reorderAction(_ sender: Any) {
+        let giftId = "\(String(describing: viewModel.output.giftInfo.value?.giftTransaction?.giftId))"
+        self.navigator.show(segue: .giftDetail(giftId: giftId)) { [weak self] vc in
+            guard let self = self else { return }
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
+    }
+
 }
 
 extension EgiftRewardDetailViewController: WKNavigationDelegate {
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        if isInjected == true {
-            return
-        }
-        self.isInjected = true
-        // get HTML text
-        let js = "document.body.outerHTML"
-        webView.evaluateJavaScript(js) { (html, error) in
-            webView.loadHTMLStringWith(content: html as! String, baseURL: nil)
-        }
-        webView.frame.size.height = 1
-        webView.frame.size = webView.sizeThatFits(.zero)
-        webView.scrollView.isScrollEnabled = false;
-        webView.evaluateJavaScript("document.documentElement.scrollHeight") { [weak self] (height, error) in
-            guard let height = height as? CGFloat, let self = self else { return }
-            webviewHeightConstraint.constant = height
-            self.view.updateConstraints()
-            self.view.updateConstraintsIfNeeded()
+        switch webView {
+        case descriptionWebView:
+            if (isInjectedDescriptionWebView) {
+                return
+            }
+            isInjectedDescriptionWebView = true
+            webView.injectJavascript(superView: self.view, webViewHeightConstraint: descriptionWebViewHeightConstraint)
+            break
+        case instructionWebView:
+            if (isInjectedInstructionWebView) {
+                return
+            }
+            isInjectedInstructionWebView = true
+            webView.injectJavascript(superView: self.view, webViewHeightConstraint: instructionWebViewHeightConstraint)
+            break
+        case conditionWebView:
+            if (isInjectedConditionWebView) {
+                return
+            }
+            isInjectedConditionWebView = true
+            webView.injectJavascript(superView: self.view, webViewHeightConstraint: conditionWebViewHeightConstraint)
+            break
+        default: break
 
         }
     }
 }
 
+
 extension EgiftRewardDetailViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        3
+        let count = viewModel.output.giftInfo.value?.giftUsageAddress?.count ?? 0
+        return min(count, 3)
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -303,48 +511,18 @@ extension EgiftRewardDetailViewController: UITableViewDelegate, UITableViewDataS
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = locationTableView.dequeueCell(ofType: GiftLocationTableViewCell.self, for: indexPath)
+        let list = viewModel.output.giftInfo.value?.giftUsageAddress ?? []
+        cell.setDataForCell(data: list[indexPath.row], isLastItem: indexPath.row == list.count - 1)
         return cell
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.navigator.show(segue: .popup(
-            dismissable: true,
-            type: .twoOption,
-            title: "Truy cập Google Map",
-            message: "Coppy địa chỉ thành công. Bạn có muốn mở ứng dụng Google Maps để xem địa chỉ không?",
-            image: .imgGiftMap!,
-            confirmnButton: (title: "Đống ý", action: {
-                print("Open google map");
-            }),
-            cancelButton: (title: "Huỷ", action: nil)
-            )) { [weak self] vc in
-            guard let self = self else { return }
-            vc.modalPresentationStyle = .overFullScreen
-            vc.modalTransitionStyle = .crossDissolve
-            self.navigationController?.present(vc, animated: true)
-        }
+        let data = viewModel.output.giftInfo.value?.giftUsageAddress?[indexPath.row]
+        UtilHelper.openGoogleMap(navigator: self.navigator, parentVC: self, address: data?.address ?? "")
     }
-
 }
 
 extension EgiftRewardDetailViewController {
-
-    func setUpEasyView() {
-        let gesture = UITapGestureRecognizer(target: self, action: #selector(self.dimissTipView))
-        self.view.addGestureRecognizer(gesture)
-
-        var preferences = EasyTipView.Preferences()
-        preferences.drawing.font = .systemFont(ofSize: 14)
-        preferences.drawing.foregroundColor = .white
-        preferences.drawing.backgroundColor = .c242424!
-        preferences.drawing.arrowPosition = EasyTipView.ArrowPosition.bottom
-        tipView = EasyTipView(text: "Ưu đãi có giá trị sử dụng đến 23:59 căn cứ theo giờ Việt Nam (GMT+7) và theo hệ thống LYNKID.", preferences: preferences)
-    }
-
-    @objc func dimissTipView(sender: UITapGestureRecognizer) {
-        tipView.dismiss()
-    }
-
 
     func startTimmer() {
         timer.invalidate()
@@ -363,5 +541,19 @@ extension EgiftRewardDetailViewController {
             return
         }
         counter += 1
+    }
+}
+
+extension EgiftRewardDetailViewController: UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let shrinkOffset = self.scrollView.contentOffset.y
+        let headerViewBottom = self.headerView.frame.origin.y + self.headerView.frame.size.height
+
+        let alpha: CGFloat = {
+            let _alpha = (headerViewBottom - shrinkOffset) / headerViewBottom
+            return _alpha
+        }()
+        self.headerView.alpha = 1 - alpha
+        self.headerView.isHidden = alpha == 0
     }
 }

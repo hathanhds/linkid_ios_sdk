@@ -37,7 +37,7 @@ class SlideToActionButton: UIView {
         let view = UIImageView()
         view.translatesAutoresizingMaskIntoConstraints = false
 //        view.image = UIImage(systemName: "chevron.right.2", withConfiguration: UIImage.SymbolConfiguration(font: .systemFont(ofSize: 40, weight: .bold)))?.withRenderingMode(.alwaysTemplate)
-        view.image = UIImage(named: "ic_arrow_to_swipe")
+        view.image = .iconArrowToSwipe
         view.contentMode = .scaleAspectFit
         view.tintColor = Colors.tint
         return view

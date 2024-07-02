@@ -237,7 +237,7 @@ class ListGiftByCateViewModel: ViewModelType {
         userRepository.getUserPoint()
             .subscribe { [weak self] res in
             guard let self = self else { return }
-            userPointSubj.accept(res.items)
+                userPointSubj.accept(res.data?.items)
         }.disposed(by: disposeBag)
     }
 

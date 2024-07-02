@@ -17,6 +17,7 @@ struct AllGiftsRequestModel {
     var giftType: String?
     var sorting: GiftSorting?
     var tokenBalance: Int
+    var searchText: String?
 
     init(category: GiftCategory? = nil,
         parentCateCode: String? = nil,
@@ -26,7 +27,8 @@ struct AllGiftsRequestModel {
         brandId: String? = nil,
         giftType: String? = nil,
         sorting: GiftSorting? = nil,
-        tokenBalance: Int = 0
+        tokenBalance: Int = 0,
+        searchText: String? = nil
     ) {
         self.category = category
         self.parentCateCode = parentCateCode
@@ -37,10 +39,11 @@ struct AllGiftsRequestModel {
         self.giftType = giftType
         self.sorting = sorting
         self.tokenBalance = tokenBalance
+        self.searchText = searchText
     }
 
     func getParams() -> [String: Any] {
-        let cateCode = category?.code ?? ""
+//        let cateCode = category?.code ?? ""
         var params = [
             "MemberCode": AppConfig.shared.memberCode,
             "MaxItem": 5,
@@ -61,6 +64,9 @@ struct AllGiftsRequestModel {
         if let category = category {
             fullGiftCategoryCodeFilter = category.code ?? ""
             params["CategoryTypeCode"] = category.categoryTypeCode
+        }
+        if let searchText = searchText {
+            params["Filter"] = searchText
         }
         if let filterModel = self.filterModel {
             // Loại quà
@@ -83,6 +89,7 @@ struct AllGiftsRequestModel {
                 params["RegionCodeFilter"] = locations.map { $0.id }.joined(separator: ";")
             }
         }
+        params["FullGiftCategoryCodeFilter"] = fullGiftCategoryCodeFilter
         return params
     }
 }

@@ -7,9 +7,9 @@
 //
 
 import UIKit
+import iCarousel
 import SkeletonView
 import RxSwift
-import iCarousel
 
 class HomeViewController: BaseViewController, ViewControllerType {
 
@@ -45,7 +45,6 @@ class HomeViewController: BaseViewController, ViewControllerType {
     @IBOutlet weak var giftCateCollectionView: UICollectionView!
     @IBOutlet weak var giftCateTitleLabel: UILabel!
     @IBOutlet weak var giftCateSeeMoreButton: UIButton!
-
     @IBOutlet weak var indicatorLeaderConstraint: NSLayoutConstraint!
 
     // Install app babber
@@ -86,6 +85,7 @@ class HomeViewController: BaseViewController, ViewControllerType {
         super.viewWillAppear(animated)
         self.hideNavigationBar(animated: false)
     }
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.showNavigationBar(animated: false)
@@ -108,11 +108,22 @@ class HomeViewController: BaseViewController, ViewControllerType {
         self.headerUserPointLabel.text = hidePointText
 
         // Carousel
-        setUpCarousel()
+        setUpCarousel(carousel: newsBannerCarousel, cornerRadius: 12.0)
+        // Auto scroll
+        _ = Timer.scheduledTimer(timeInterval: 3.0, target: self, selector: #selector(self.handleTimer), userInfo: nil, repeats: true)
 
         // Scroll view
         scrollView.addPullToRefresh(target: self, action: #selector(onRefresh), topOffset: 48)
     }
+
+    @objc func handleTimer() {
+        var newIndex = newsBannerCarousel.currentItemIndex + 1
+        if newIndex > newsBannerCarousel.numberOfItems {
+            newIndex = 0
+        }
+        newsBannerCarousel.scrollToItem(at: newIndex, duration: 0.5)
+    }
+
 
     override func bindToView() {
 
@@ -126,14 +137,13 @@ class HomeViewController: BaseViewController, ViewControllerType {
         viewModel.output.isLoadingUserInfo.subscribe(onNext: { [weak self] isLoading in
             guard let self = self else { return }
             if (isLoading) {
-                self.avatarImageView.addIndicator()
                 self.avatarImageView.showIndicator()
             } else {
                 let userInfo = viewModel.output.userInfo.value
                 self.avatarImageView.hideIndicator()
 
                 self.avatarImageView.setSDImage(with: userInfo?.avatar, placeholderImage: .imgAvatarDefault)
-                self.userNameLabel.text = userInfo?.name ?? userInfo?.phoneNumber
+                self.userNameLabel.text = userInfo?.name ?? AppConfig.shared.phoneNumber
 
             }
         })
@@ -142,8 +152,8 @@ class HomeViewController: BaseViewController, ViewControllerType {
         viewModel.output.isShowCoin.subscribe(onNext: { [weak self] isShowCoin in
             guard let self = self else { return }
             if (isShowCoin) {
-                let userInfo = viewModel.output.userInfo.value
-                let pointFormatterString = Double(userInfo?.tokenBalance ?? 0).formatter()
+                let userPoint = viewModel.output.userPoint.value
+                let pointFormatterString = Double(userPoint?.tokenBalance ?? 0).formatter()
                 self.userPointLabel.text = pointFormatterString
                 self.headerUserPointLabel.text = pointFormatterString
 
@@ -241,29 +251,6 @@ class HomeViewController: BaseViewController, ViewControllerType {
 
     }
 
-
-
-    func setUpCarousel() {
-//        newsBannerCarousel.delegate = self
-//        newsBannerCarousel.dataSource = self
-        newsBannerCarousel.type = .linear
-        newsBannerCarousel.scrollToItem(at: 0, animated: true)
-        newsBannerCarousel.isPagingEnabled = true
-        // Auto scroll
-        _ = Timer.scheduledTimer(timeInterval: 3.0, target: self, selector: #selector(self.handleTimer), userInfo: nil, repeats: true)
-
-        bannerPageControl.currentPageIndicatorTintColor = .mainColor
-        bannerPageControl.pageIndicatorTintColor = .black.withAlphaComponent(0.6)
-    }
-
-    @objc func handleTimer() {
-        var newIndex = newsBannerCarousel.currentItemIndex + 1
-        if newIndex > newsBannerCarousel.numberOfItems {
-            newIndex = 0
-        }
-        newsBannerCarousel.scrollToItem(at: newIndex, duration: 0.5)
-    }
-
     @objc func swipeCarouselRight(sender: UISwipeGestureRecognizer) { newsBannerCarousel.scroll(byNumberOfItems: -1, duration: 0.1) }
 
     @objc func onRefresh() {
@@ -274,14 +261,16 @@ class HomeViewController: BaseViewController, ViewControllerType {
     // MARK: - Action
 
     @IBAction func searchAction(_ sender: Any) {
-        self.navigator.show(segue: .listGiftByGroup(groupName: "Ưu đãi group", groupCode: "")) { [weak self] vc in
+        self.navigator.show(segue: .search) { [weak self] vc in
             guard let self = self else { return }
-            self.navigationController?.pushViewController(vc, animated: true)
+            let navController = UINavigationController(rootViewController: vc)
+            navController.modalPresentationStyle = .fullScreen
+            self.present(navController, animated: true)
         }
     }
 
     @IBAction func closeAction(_ sender: Any) {
-        self.dismiss(animated: true)
+        self.dimissAllViewControllers()
     }
 
     @IBAction func viewPointAction(_ sender: Any) {
@@ -415,12 +404,38 @@ extension HomeViewController: SkeletonCollectionViewDataSource, SkeletonCollecti
     // MARK: - Delegate
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let category = viewModel.output.giftCates.value[indexPath.row]
-        self.navigator.show(segue: .listGiftByCate(cate: category)) { [weak self] vc in
-            guard let self = self else { return }
-            self.navigationController?.pushViewController(vc, animated: true)
-        }
 
+        let category = viewModel.output.giftCates.value[indexPath.row]
+        
+        switch collectionView {
+        case self.giftCateCollectionView:
+            let category = viewModel.output.giftCates.value[indexPath.row]
+            if(category.name == "Diamond"){
+                self.navigator.show(segue: .listDiamondGiftByCate(cate: category)) { [weak self] vc in
+                    guard let self = self else { return }
+                    self.navigationController?.pushViewController(vc, animated: true)
+                }
+            } else {
+                self.navigator.show(segue: .listGiftByCate(cate: category)) { [weak self] vc in
+                    guard let self = self else { return }
+                    self.navigationController?.pushViewController(vc, animated: true)
+                }
+            }
+        case self.giftGroupCollectionView:
+            let gift = (viewModel.output.giftGroupInfo.value?.gifts ?? [])[indexPath.row]
+            if let giftId = gift.giftInfo?.id {
+                self.navigator.show(segue: .giftDetail(giftId: "\(giftId)")) { [weak self] vc in
+                    guard let self = self else { return }
+                    self.navigationController?.pushViewController(vc, animated: true)
+                }
+            }
+        case self.newsCollectionView:
+            // TODO: open news detail
+            break
+        default: break
+            
+        }
+        
     }
 
     // MARK: - Flow layout
@@ -460,56 +475,56 @@ extension HomeViewController: SkeletonCollectionViewDataSource, SkeletonCollecti
 
 }
 
-//extension HomeViewController: iCarouselDataSource, iCarouselDelegate {
-//
-//    // MARK: - iCarousel Datasource
-//
-//    func numberOfItems(in carousel: iCarousel) -> Int {
-//        return self.viewModel.output.banners.value.count
-//    }
-//
-//    func carousel(_ carousel: iCarousel, viewForItemAt index: Int, reusing view: UIView?) -> UIView {
-//        let imageView: UIImageView
-//
-//        if view != nil {
-//            imageView = view as! UIImageView
-//        } else {
-//            imageView = UIImageView(frame: self.newsBannerCarousel.frame)
-//        }
-//
-//        let banners = self.viewModel.output.banners.value
-//
-//        imageView.setSDImage(with: banners[index].article?.linkAvatar)
-//        imageView.layer.cornerRadius = 12.0
-//        imageView.layer.masksToBounds = true
-//
-//        return imageView
-//    }
-//
-//    // MARK: - iCarousel Delegate
-//
-//
-//    func carousel(_ carousel: iCarousel, valueFor option: iCarouselOption, withDefault value: CGFloat) -> CGFloat {
-//        switch (option) {
-//        case .spacing:
-//            return value * 1.05
-//        case .visibleItems:
-//            return 3.0
-//        case .wrap:
-//            return 1
-//        default:
-//            return value
-//        }
-//    }
-//
-//    func carousel(_ carousel: iCarousel, didSelectItemAt index: Int) {
-//        // TODO: - hanlde open news detail
-//    }
-//
-//    func carouselCurrentItemIndexDidChange(_ carousel: iCarousel) {
-//        self.viewModel.output.currentBannerPageControlIndex.accept(carousel.currentItemIndex)
-//    }
-//}
+extension HomeViewController: iCarouselDataSource, iCarouselDelegate {
+
+    // MARK: - iCarousel Datasource
+
+    func numberOfItems(in carousel: iCarousel) -> Int {
+        return self.viewModel.output.banners.value.count
+    }
+
+    func carousel(_ carousel: iCarousel, viewForItemAt index: Int, reusing view: UIView?) -> UIView {
+        let imageView: UIImageView
+
+        if view != nil {
+            imageView = view as! UIImageView
+        } else {
+            imageView = UIImageView(frame: self.newsBannerCarousel.frame)
+        }
+
+        let banners = self.viewModel.output.banners.value
+
+        imageView.setSDImage(with: banners[index].article?.linkAvatar)
+        imageView.layer.cornerRadius = 12.0
+        imageView.layer.masksToBounds = true
+
+        return imageView
+    }
+
+    // MARK: - iCarousel Delegate
+
+
+    func carousel(_ carousel: iCarousel, valueFor option: iCarouselOption, withDefault value: CGFloat) -> CGFloat {
+        switch (option) {
+        case .spacing:
+            return value * 1.05
+        case .visibleItems:
+            return 3.0
+        case .wrap:
+            return 1
+        default:
+            return value
+        }
+    }
+
+    func carousel(_ carousel: iCarousel, didSelectItemAt index: Int) {
+        // TODO: - hanlde open news detail
+    }
+
+    func carouselCurrentItemIndexDidChange(_ carousel: iCarousel) {
+        self.viewModel.output.currentBannerPageControlIndex.accept(carousel.currentItemIndex)
+    }
+}
 
 extension HomeViewController {
     func setUpSkeleton () {

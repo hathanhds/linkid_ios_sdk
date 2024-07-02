@@ -8,14 +8,15 @@
 import RxSwift
 
 class UserRepositoryImpl: UserRepository {
+
     private let disposeBag = DisposeBag()
 
-    func getUserInfo() -> RxSwift.Single<UserInfoResponseModel> {
+    func getMemberView() -> Single<MemberViewResponseModel> {
         return Single.create { observer -> Disposable in
-            APIManager.request(target: .getUserInfo)
-                .map({ res -> UserInfoResponseModel in
+            APIManager.request(target: .getMemberView)
+                .map({ res -> MemberViewResponseModel in
                 let data = res.data
-                if let model = try? data.decoded(type: UserInfoResponseModel.self) {
+                if let model = try? data.decoded(type: MemberViewResponseModel.self) {
                     return model
                 } else {
                     throw APIError.somethingWentWrong
@@ -33,17 +34,39 @@ class UserRepositoryImpl: UserRepository {
         }.observe(on: MainScheduler())
     }
 
-    func getUserPoint() -> RxSwift.Single<UserPointResponseModel> {
+    func getUserPoint() -> RxSwift.Single<BaseResponseModel2<UserPointResponseModel>> {
         return Single.create { observer -> Disposable in
-            APIManager.request(target: .getUserInfo)
-                .map({ res -> UserPointResponseModel in
+            APIManager.request(target: .getUserPoint)
+                .map({ res -> BaseResponseModel2<UserPointResponseModel> in
                 let data = res.data
-                if let model = try? data.decoded(type: UserPointResponseModel.self) {
+                if let model = try? data.decoded(type: BaseResponseModel2<UserPointResponseModel>.self) {
+                    AppUserDefaults.userPoint = Double(model.data?.items?.tokenBalance ?? 0)
                     return model
                 } else {
                     throw APIError.somethingWentWrong
                 }
+            })
+                .subscribe(onSuccess: { model in
+                observer(.success(model))
+            }, onFailure: { error in
+                    observer(.failure(error))
+                })
+                .disposed(by: self.disposeBag)
 
+            return Disposables.create()
+        }.observe(on: MainScheduler())
+    }
+
+    func getLocation(request: LocationRequestModel) -> Single<BaseResponseModel<LocationResponseModel>> {
+        return Single.create { observer -> Disposable in
+            APIManager.request(target: .getLocation(request: request))
+                .map({ res -> BaseResponseModel<LocationResponseModel> in
+                let data = res.data
+                if let model = try? data.decoded(type: BaseResponseModel<LocationResponseModel>.self) {
+                    return model
+                } else {
+                    throw APIError.somethingWentWrong
+                }
             })
                 .subscribe(onSuccess: { model in
                 observer(.success(model))

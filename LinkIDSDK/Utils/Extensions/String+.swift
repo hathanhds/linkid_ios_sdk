@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 extension String {
     func containsAlphabetLetters() -> Bool {
@@ -44,6 +45,11 @@ extension String {
         }
         return false
     }
+
+    func trim() -> String {
+        return self.trimmingCharacters(in: NSCharacterSet.whitespaces)
+    }
+
 }
 
 extension String {
@@ -98,4 +104,101 @@ extension String {
         return "*** *** " + self.suffix(4)
     }
 
+    func isWebURL() -> Bool {
+        guard let url = URL(string: self), let scheme = url.scheme, let _ = url.host else {
+            return false
+        }
+        return ["http", "https"].contains(scheme.lowercased())
+    }
+
+}
+
+
+extension String {
+    var htmlToAttributedString: NSAttributedString? {
+        guard let data = data(using: .utf8) else { return nil }
+        do {
+            return try NSAttributedString(data: data, options: [.documentType: NSAttributedString.DocumentType.html, .characterEncoding: String.Encoding.utf8.rawValue], documentAttributes: nil)
+        } catch {
+            return nil
+        }
+    }
+    var htmlToString: String {
+        return htmlToAttributedString?.string ?? ""
+    }
+
+}
+
+extension String {
+    func replacingLastCharacters(with replacement: String, numberOfReplacedCharacters: Int = 4) -> String {
+        guard self.count >= numberOfReplacedCharacters else {
+            // If the string is shorter than 4 characters, return the replacement string
+            return replacement
+        }
+
+        let endIndex = self.endIndex
+        let startIndex = self.index(endIndex, offsetBy: -numberOfReplacedCharacters)
+        let range = startIndex..<endIndex
+
+        let newString = self.replacingCharacters(in: range, with: replacement)
+        return newString
+    }
+}
+
+extension String {
+    func truncated(to length: Int, addEllipsis: Bool = false) -> String {
+        if self.count > length {
+            let endIndex = self.index(self.startIndex, offsetBy: length)
+            let truncatedString = self[..<endIndex]
+            return addEllipsis ? "\(truncatedString)..." : String(truncatedString)
+        } else {
+            return self
+        }
+    }
+}
+
+extension String {
+    
+    func removingSpecialCharacters() -> String {
+        let pattern = "[^a-zA-Z0-9]"
+        do {
+            let regex = try NSRegularExpression(pattern: pattern, options: [])
+            let range = NSRange(location: 0, length: self.utf16.count)
+            return regex.stringByReplacingMatches(in: self, options: [], range: range, withTemplate: " ")
+        } catch {
+            print("Invalid regex: \(error.localizedDescription)")
+            return self
+        }
+    }
+
+    func removeDiacritics() -> String {
+        if self.isEmpty {
+            return self
+        }
+        var string = self.replacingOccurrences(of: "[à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ]", with: "a", options: [.regularExpression])
+        string = string.replacingOccurrences(of: "[è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ]", with: "e", options: [.regularExpression])
+        string = string.replacingOccurrences(of: "[ì|í|ị|ỉ|ĩ]", with: "i", options: [.regularExpression])
+        string = string.replacingOccurrences(of: "[ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ]", with: "o", options: [.regularExpression])
+        string = string.replacingOccurrences(of: "[ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ]", with: "u", options: [.regularExpression])
+        string = string.replacingOccurrences(of: "[ỳ|ý|ỵ|ỷ|ỹ]", with: "y", options: [.regularExpression])
+        string = string.replacingOccurrences(of: "[đ]", with: "y", options: [.regularExpression])
+        return string.lowercased()
+    }
+}
+
+extension NSAttributedString {
+    func applyFontAndColor(_ font: UIFont = .f14r ?? .systemFont(ofSize: 14), _ color: UIColor = .c242424 ?? .black) -> NSAttributedString {
+        let mutableAttributedString = NSMutableAttributedString(attributedString: self)
+
+        mutableAttributedString.beginEditing()
+        mutableAttributedString.enumerateAttribute(.font, in: NSRange(location: 0, length: self.length), options: []) { (value, range, stop) in
+            if let _ = value as? UIFont {
+                mutableAttributedString.addAttribute(.font, value: font, range: range)
+                mutableAttributedString.addAttribute(.foregroundColor, value: color, range: range)
+            }
+        }
+        mutableAttributedString.endEditing()
+
+        return mutableAttributedString
+    }
 }

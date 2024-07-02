@@ -16,6 +16,7 @@ struct GiftInfoItem: Codable {
     var eGift: EGift?
     var vendorInfo: VendorInfo?
     var imageLinks: [ImageLinkModel]?
+    var imageLink: [ImageLinkModel]?
     var giftInfor: GiftInfor?
     var relatedGiftInfor: [GiftInfor]?
     var remainingQuantityOfTheGift: Int?
@@ -29,7 +30,7 @@ struct GiftInfoItem: Codable {
     var feeInfor: String?
     var giftCategoryTypeCode: String?
     var balanceAbleToCashout: Int?
-    var giftUsageAddress: [GiftAddressItem]?
+    var giftUsageAddress: [GiftUsageLocationItem]?
     var thirdPartyCategoryName: String?
 
     var topupCateType: TopupCateType? {
@@ -87,6 +88,7 @@ struct EGift: Codable {
     var code: String?
     var description: String?
     var status: String?
+    var usedStatus: String?
     var expiredDate: String?
     var giftCode: String?
     var giftId: Int?
@@ -111,7 +113,7 @@ struct GiftInfor: Codable {
     var usedQuantity: Int?
     var remainingQuantity: Int?
     var fullPrice: Double?
-    var discountPrice: Int?
+    var discountPrice: Double?
     var isEGift: Bool?
     var tag: String?
     var isInWishlist: Bool?
@@ -152,6 +154,7 @@ struct GiftInfor: Codable {
     var totalRedeemedOfUser: Int?
     var maxAllowedRedemptionOfUser: Int?
     var maxQuantityPerRedemptionOfUser: Int?
+    var imageLink: [ImageLink]?
 }
 
 struct BrandInfo: Codable {
@@ -198,21 +201,12 @@ struct FlashSaleGiftItem: Codable {
 struct GiftDiscountInfor: Codable {
     var salePrice: Double?
     var remainingQuantityFlashSale: Int?
-    var reductionRateDisplay: Int?
+    var reductionRateDisplay: Double?
     var warningOutOfStock: Bool?
     var status: String?
     var redeemGiftQuantity: Int? // số lượng đã đổi của quà trong chương trình
     var redeemFlashSaleQuantity: Int? // số lượng đã đổi quà của cả chương trình
     var maxAmountRedeem: Int?
-}
-
-struct GiftAddressItem: Codable {
-    var id: Int?
-    var name: String?
-    var address: String?
-    var phone: String?
-    var latitude: String?
-    var longtitude: String?
 }
 
 struct VendorInfo: Codable {

@@ -38,11 +38,13 @@ class PhysicalRewardStatusCollectionViewCell: UICollectionViewCell {
         if (data.isLeftLineActive) {
             leftLineView.backgroundColor = .mainColor
             dotView.backgroundColor = .mainColor
+            statusLabel.textColor = .mainColor
             statusView.isHidden = false
             stepView.isHidden = true
         } else {
             leftLineView.backgroundColor = .cD8D6DD
             dotView.backgroundColor = .cD8D6DD
+            statusLabel.textColor = .cA7A7B3
             statusView.isHidden = true
             stepView.isHidden = false
         }

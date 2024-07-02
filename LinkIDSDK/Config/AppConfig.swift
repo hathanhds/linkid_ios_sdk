@@ -24,6 +24,7 @@ class AppConfig {
     var connectedMemberCode = ""
     var merchantName = ""
     var viewMode: ViewMode = .anonymous
+    var hotLine = "1900 636 835"
 
 
     var phoneNumberFormatter: String {

@@ -29,8 +29,9 @@ extension UIScrollView {
         }
     }
 
-    func addPullToRefresh(target: Any?, action: Selector, topOffset: Double? = nil) {
+    func addPullToRefresh(target: Any?, action: Selector, topOffset: Double? = nil, tintColor: UIColor? = .mainColor) {
         let refreshControl = UIRefreshControl()
+        refreshControl.tintColor = tintColor
         refreshControl.addTarget(target, action: action, for: .valueChanged)
         if let top = topOffset {
             refreshControl.bounds = CGRect(x: refreshControl.bounds.origin.x,

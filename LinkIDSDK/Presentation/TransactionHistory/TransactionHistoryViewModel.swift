@@ -7,25 +7,51 @@
 //
 
 import Foundation
+import RxSwift
+import RxCocoa
 
-protocol TransactionHistoryViewModelInput {
-    func viewDidLoad()
-}
 
-protocol TransactionHistoryViewModelOutput {
+class TransactionHistoryViewModel{
+    let disposeBag = DisposeBag()
+    let dispatchGroup = DispatchGroup()
     
-}
-
-protocol TransactionHistoryViewModel: TransactionHistoryViewModelInput, TransactionHistoryViewModelOutput { }
-
-class DefaultTransactionHistoryViewModel: TransactionHistoryViewModel {
+    private let merchantRepository: MerchantRepository
     
-    // MARK: - OUTPUT
+    struct Input {
+        let viewDidLoad: AnyObserver<Void>
 
-}
+    }
 
-// MARK: - INPUT. View event methods
-extension DefaultTransactionHistoryViewModel {
-    func viewDidLoad() {
+    struct Output {
+    
+    }
+    
+    let input: Input
+    let viewDidLoadSubj = PublishSubject<Void>()
+
+    let output: Output
+   
+    
+    init(merchantRepository: MerchantRepository) {
+        self.merchantRepository = merchantRepository
+
+        self.input = Input(viewDidLoad: viewDidLoadSubj.asObserver())
+        self.output = Output()
+
+        self.viewDidLoadSubj.subscribe { [weak self] _ in
+            guard let self = self else { return }
+            self.fetchData()
+        }.disposed(by: disposeBag)
+
+    }
+    
+    func fetchData() {
+        dispatchGroup.enter()
+        merchantRepository.getListMerchant(request: MerchantRequestModel()).subscribe{ _ in
+          
+        } onFailure: { [weak self] error in
+            guard let self = self else { return }
+            dispatchGroup.leave()
+        }.disposed(by: disposeBag)
     }
 }

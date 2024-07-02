@@ -31,7 +31,7 @@ class HomeViewModel: ViewModelType {
         let isShowCoin: BehaviorRelay<Bool>
 
         let isLoadingUserInfo: BehaviorRelay<Bool>
-        let userInfo: BehaviorRelay<UserInfo?>
+        let userInfo: BehaviorRelay<MemberView?>
         let userPoint: BehaviorRelay<UserPoint?>
 
         let isLoadingGiftCates: BehaviorRelay<Bool>
@@ -59,7 +59,7 @@ class HomeViewModel: ViewModelType {
     let isShowCoinSubj = BehaviorRelay(value: false)
 
     let isLoadingUserInfoSubj = BehaviorRelay(value: true)
-    let userInfoSubj = BehaviorRelay<UserInfo?>(value: nil)
+    let userInfoSubj = BehaviorRelay<MemberView?>(value: nil)
     let userPointSubj = BehaviorRelay<UserPoint?>(value: nil)
 
     let isLoadingGiftCatesSubj = BehaviorRelay(value: true)
@@ -120,20 +120,20 @@ class HomeViewModel: ViewModelType {
     }
 
     func fetchData() {
-        getUserInfo()
+        getMemberView()
         getUserPoint()
         getListNewsAndBanner()
         getListGiftGroup()
         getListCate()
     }
 
-    func getUserInfo() {
+    func getMemberView() {
         isLoadingUserInfoSubj.accept(true)
         dispatchGroup.enter()
-        userRepository.getUserInfo()
+        userRepository.getMemberView()
             .subscribe { [weak self] res in
             guard let self = self else { return }
-            userInfoSubj.accept(res.items)
+            userInfoSubj.accept(res.data)
             isLoadingUserInfoSubj.accept(false)
             dispatchGroup.leave()
         } onFailure: { [weak self] error in
@@ -147,7 +147,8 @@ class HomeViewModel: ViewModelType {
         userRepository.getUserPoint()
             .subscribe { [weak self] res in
             guard let self = self else { return }
-            userPointSubj.accept(res.items)
+            let items = res.data?.items
+            userPointSubj.accept(items)
         }.disposed(by: disposeBag)
     }
 
@@ -194,7 +195,7 @@ class HomeViewModel: ViewModelType {
         giftsRepository.getListGiftCate()
             .subscribe { [weak self] res in
             guard let self = self else { return }
-                giftCatesSubj.accept(res.data?.row2 ?? [])
+            giftCatesSubj.accept(res.data?.row2 ?? [])
             isLoadingGiftCatesSubj.accept(false)
             dispatchGroup.leave()
         } onFailure: { [weak self] error in

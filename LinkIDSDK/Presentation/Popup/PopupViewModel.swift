@@ -41,7 +41,8 @@ class PopupViewModel: ViewModelType {
     private let cancelActionSubj = PublishSubject<Void>()
     let output: Output
 
-    init(dismissable: Bool? = true, type: PopupType, title: String = "", message: String = "", image: UIImage = .imgEmptyGift!, confirmnButton: ConfirmButton? = nil, cancelButton: CancelButton? = nil) {
+    init(dismissable: Bool? = true, type: PopupType, title: String = "", message: String = "", image: UIImage = .imageMascotError!
+        , confirmnButton: ConfirmButton? = nil, cancelButton: CancelButton? = nil) {
         self.input = Input(confirmAction: self.confirmActionSubj.asObserver(), cancelAction: self.cancelActionSubj.asObserver())
         self.output = Output(dismissable: dismissable, type: type, title: title, image: image, message: message, cancelButtonTitle: cancelButton?.title, confirmButtonTitle: confirmnButton?.title)
 

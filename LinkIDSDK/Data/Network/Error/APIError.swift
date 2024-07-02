@@ -7,15 +7,15 @@
 
 import Foundation
 
-enum APIError: Error {
-    case somethingWentWrong
-    case unauthorized
-    case noInternetConnection
-    case invalidRequest
-    case notFound
-    case invalidResponse
-    case timeOut
-    case noData
-    case internalSever
+enum APIError: String, LocalizedError {
+    case somethingWentWrong = "Có lỗi hệ thống. Vui lòng thử lại sau"
+    case unauthorized = "Phiên đăng nhập đã hết hạn, để tiếp tục sử dụng mời bạn đăng nhập lại nhé."
+    case noInternetConnection = "Vui lòng kiểm tra kết nối mạng"
+    case notFound = "Không tìm thấy dữ liệu"
 }
 
+extension APIError {
+    var errorDescription: String? {
+        return self.rawValue
+    }
+}

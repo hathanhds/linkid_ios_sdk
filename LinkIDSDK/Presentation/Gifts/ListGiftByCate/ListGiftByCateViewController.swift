@@ -65,11 +65,18 @@ class ListGiftByCateViewController: BaseViewController, ViewControllerType {
         cateCollectionView.registerCellFromNib(ofType: GiftCategoryCollectionViewCell.self)
         tableView.register(cellType: GiftTableViewCell.self)
         tableView.register(cellType: GiftGroupTableViewCell.self)
+        tableView.register(cellType: GiftSectionTitleTableViewCell.self)
         tableView.addPullToRefresh(target: self, action: #selector(self.onRefresh))
     }
 
     @objc func onSearch() {
-        // TODO: (thanh) open search screen
+        self.navigator.show(segue: .search) { [weak self] vc in
+            guard let self = self else { return }
+            let navController = UINavigationController(rootViewController: vc)
+            navController.modalPresentationStyle = .fullScreen
+            self.present(navController, animated: true)
+        }
+
     }
 
     @objc func onRefresh() {
@@ -129,12 +136,12 @@ class ListGiftByCateViewController: BaseViewController, ViewControllerType {
         viewModel.output.sorting
             .subscribe(onNext: { [weak self] sorting in
             guard let self = self else { return }
-            if (sorting == GiftSorting.requiredCoinDesc) {
+            if (sorting == GiftSorting.requiredCoinAsc || sorting == GiftSorting.displayOrder) {
                 sortLabel.text = "Giá tăng dần"
-                sortImageView.image = .icGiftSortDesc
+                sortImageView.image = .icGiftSortAsc
             } else {
                 sortLabel.text = "Giá giảm dần"
-                sortImageView.image = .icGiftSortAsc
+                sortImageView.image = .icGiftSortDesc
             }
         }).disposed(by: disposeBag)
 
@@ -272,9 +279,21 @@ extension ListGiftByCateViewController: UITableViewDataSource, UITableViewDelega
 
 
     // MARK: - Delegate
-
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // TODO: thanh - Open Gift detail screen
+        var giftId = ""
+        if (indexPath.section == 0) {
+            if let gifts = viewModel.output.giftGroup.value?.gifts, let id = gifts[indexPath.row].giftInfo?.id {
+                giftId = "\(id)"
+            }
+        } else {
+            if let id = viewModel.output.gifts.value[indexPath.row].giftInfor?.id {
+                giftId = "\(id)"
+            }
+        }
+        self.navigator.show(segue: .giftDetail(giftId: giftId)) { [weak self] vc in
+            guard let self = self else { return }
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
     }
 }
 

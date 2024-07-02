@@ -7,6 +7,8 @@
 
 import UIKit
 import RxSwift
+import Tabman
+import Pageboy
 
 class GiftSearchViewController: BaseViewController {
 
@@ -18,16 +20,17 @@ class GiftSearchViewController: BaseViewController {
     }
 
     // Outlets
+    @IBOutlet weak var headerView: UIView!
     @IBOutlet weak var searchTF: UITextField!
     @IBOutlet weak var sortImageView: UIImageView!
     @IBOutlet weak var sortLabel: UILabel!
     @IBOutlet weak var icFilterImageView: UIImageView!
     @IBOutlet weak var floatingView: UIView!
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var sortButton: UIButton!
 
     // Variables
     var viewModel: GiftSearchViewModel!
-    let hasData = true
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,28 +49,96 @@ class GiftSearchViewController: BaseViewController {
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        headerView.setCommonGradient()
     }
 
     override func initView() {
         tableView.tableFooterView = UIView()
         tableView.register(cellType: GiftTableViewCell.self)
-        tableView.addPullToRefresh(target: self, action: #selector(self.onRefresh))
+        tableView.register(cellType: GiftSectionTitleTableViewCell.self)
+        searchTF.returnKeyType = .search
     }
 
-    @objc func onRefresh() {
-//        viewModel.input.refreshData.onNext(())
+    override func bindToView() {
+        // search state
+        viewModel.output.searchState.subscribe(onNext: { [weak self] searchState in
+            guard let self = self else { return }
+            if searchState == SearchState.initial {
+                self.tableView.isHidden = true
+                self.hideLoading()
+            } else {
+                self.tableView.isHidden = false
+            }
+            self.floatingView.isHidden = searchState != SearchState.searchResult
+        }).disposed(by: disposeBag)
+
+        // loading
+        viewModel.output.isLoading.subscribe(onNext: { [weak self] isLoading in
+            guard let self = self else { return }
+            if (isLoading) {
+                self.showLoading()
+            } else {
+                self.hideLoading()
+            }
+            tableView.reloadData()
+        }).disposed(by: disposeBag)
+
+        // Filter icon
+        viewModel.output.filterModel
+            .subscribe(onNext: { [weak self] filterModel in
+            guard let self = self else { return }
+            self.icFilterImageView.isHidden = filterModel == nil
+        }).disposed(by: disposeBag)
+
+        // sorting
+        viewModel.output.sorting
+            .subscribe(onNext: { [weak self] sorting in
+            guard let self = self else { return }
+            if (sorting == GiftSorting.requiredCoinAsc) {
+                sortLabel.text = "Giá tăng dần"
+                sortImageView.image = .icGiftSortAsc
+            } else {
+                sortLabel.text = "Giá giảm dần"
+                sortImageView.image = .icGiftSortDesc
+            }
+        }).disposed(by: disposeBag)
+
+        // Button
+        sortButton.rx.tap
+            .delay(.milliseconds(300), scheduler: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] in
+            guard let self = self else { return }
+            viewModel.onSorting()
+        }).disposed(by: disposeBag)
+
     }
 
+    override func bindToViewModel() {
+        viewModel.output.searchText
+            .bind(to: searchTF.rx.text)
+            .disposed(by: disposeBag)
+    }
+
+    // MARK: -Action
     @IBAction func closeAction(_ sender: Any) {
         self.dismiss(animated: true)
     }
 
-    @IBAction func sortAction(_ sender: Any) {
-    }
-
     @IBAction func filterAction(_ sender: Any) {
+        self.navigator.show(segue: .giftFilter(filterModel: viewModel.output.filterModel.value, applyFilterAction: { filterModel in
+            self.viewModel.onApplyFilterModelCallBack(filterModel: filterModel)
+        })) { vc in
+            vc.modalPresentationStyle = .overFullScreen
+            self.present(vc, animated: true)
+        }
+
     }
 
+    @IBAction func searchAnotherTextAction(_ sender: Any) {
+        viewModel.searchTextSubj.accept("")
+        viewModel.searchStateSubj.accept(.initial)
+        searchTF.becomeFirstResponder()
+    }
 }
 
 extension GiftSearchViewController: UITableViewDataSource, UITableViewDelegate {
@@ -80,7 +151,7 @@ extension GiftSearchViewController: UITableViewDataSource, UITableViewDelegate {
         if (section == 0) {
             return 0
         }
-        return 3
+        return viewModel.getDisplayGifts().count
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -88,15 +159,16 @@ extension GiftSearchViewController: UITableViewDataSource, UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let hasSearchData = viewModel.output.searchState.value == .searchResult
         if (section == 0) {
-            if (hasData) {
+            if (hasSearchData) {
                 return nil
             }
             let section = tableView.dequeueCell(ofType: GiftSearchEmptyTableViewCell.self)
             return section.contentView
         }
         let section = tableView.dequeueCell(ofType: GiftSectionTitleTableViewCell.self)
-        section.setDataForCell(isShowSearchResult: hasData, title: hasData ? "38 kết quả" : "Gợi ý cho bạn")
+        section.setDataForCell(isShowSearchResult: hasSearchData, title: hasSearchData ? "\(viewModel.totalCount) kết quả" : "Gợi ý cho bạn")
         return section.contentView
     }
 
@@ -115,15 +187,35 @@ extension GiftSearchViewController: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueCell(ofType: GiftTableViewCell.self, for: indexPath)
-//        let gift = viewModel.output.gifts.value[indexPath.row]
-//        cell.setDataForCell(data: gift)
+        let gift = viewModel.getDisplayGifts()[indexPath.row]
+        cell.setDataForCell(data: gift)
         return cell
+    }
+
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let isLoadMore = viewModel.output.isLoadMore.value
+        let currentGifts = viewModel.output.gifts.value
+        if indexPath.row == currentGifts.count - 1,
+            currentGifts.count < viewModel.totalCount,
+            !isLoadMore {
+            viewModel.onLoadMore()
+        }
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let gift = viewModel.getDisplayGifts()[indexPath.row]
+        if let giftId = gift.giftInfor?.id {
+            self.navigator.show(segue: .giftDetail(giftId: "\(giftId)")) { [weak self] vc in
+                guard let self = self else { return }
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
+        }
     }
 }
 
 extension GiftSearchViewController: UIScrollViewDelegate {
     func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
-        floatingView.isHidden = true
+        self.floatingView.isHidden = viewModel.output.searchState.value != SearchState.searchResult
     }
 
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
@@ -131,3 +223,10 @@ extension GiftSearchViewController: UIScrollViewDelegate {
     }
 }
 
+extension GiftSearchViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        viewModel.output.searchText.accept(textField.text?.trim())
+        viewModel.input.onSearch.onNext(())
+        return true
+    }
+}

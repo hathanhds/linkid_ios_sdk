@@ -33,6 +33,16 @@ class APIManager {
 
     private init() { }
 
+    private static func hanldeFailedRequest(observer: (Result<Response, Error>) -> Void, data: Data) {
+        do {
+            let model = try data.decoded(type: APIErrorResponseModel.self)
+            observer(.failure(model))
+        } catch {
+            observer(.failure(APIError.somethingWentWrong))
+        }
+
+    }
+
     static func request(target: APIService, onQueue queue: DispatchQueue? = .global()) -> Single<Response> {
 
         guard NetworkManager.shared.isNetworkconnected else {
@@ -41,7 +51,6 @@ class APIManager {
                 return Disposables.create()
             }
         }
-
 
         switch target.tokenType {
         case .accessToken:
@@ -72,7 +81,7 @@ class APIManager {
                         case 401:
                             refreshAccessTokenRequest()
                         default:
-                            observer(.failure(APIError.somethingWentWrong))
+                            hanldeFailedRequest(observer: observer, data: res.data)
                         }
 
                     }, onFailure: { _ in
@@ -110,9 +119,8 @@ class APIManager {
                         case 401:
                             refreshSeedTokenRequest()
                         default:
-                            observer(.failure(APIError.somethingWentWrong))
+                            hanldeFailedRequest(observer: observer, data: res.data)
                         }
-
                     }, onFailure: { _ in
                         observer(.failure(APIError.somethingWentWrong))
                     })
@@ -128,7 +136,7 @@ class APIManager {
                         case 200...300:
                             observer(.success(res))
                         default:
-                            observer(.failure(APIError.somethingWentWrong))
+                            hanldeFailedRequest(observer: observer, data: res.data)
                         }
 
                     }, onFailure: { _ in

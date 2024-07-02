@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import RxSwift
 
 class GiftLocationViewController: BaseViewController, ViewControllerType {
 
@@ -22,17 +23,60 @@ class GiftLocationViewController: BaseViewController, ViewControllerType {
 
     // Variables
     var viewModel: GiftLocationViewModel!
-    @IBOutlet weak var searchImageView: UIImageView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.viewModel.viewDidLoadSubj.onNext(())
     }
 
     override func initView() {
         self.title = "Địa điểm áp dụng"
         self.addBackButton()
-        searchImageView.setImageColor(color: UIColor.cD8D6DD!)
         tableView.register(cellType: GiftLocationTableViewCell.self)
+        tableView.addPullToRefresh(target: self, action: #selector(self.onRefresh))
+    }
+
+    @objc func onRefresh() {
+        viewModel.input.refreshData.onNext(())
+    }
+    override func bindToViewModel() {
+        // Refeshing
+        viewModel.output.isRefreshing.subscribe { [weak self] isRefreshing in
+            guard let self = self else { return }
+            self.tableView.endRefreshing()
+        }.disposed(by: disposeBag)
+
+        // Loading
+        viewModel.output.isLoading.subscribe(onNext: { [weak self] isLoading in
+            guard let self = self else { return }
+            if (isLoading) {
+                self.showLoading()
+            } else {
+                self.hideLoading()
+            }
+            self.tableView.reloadData()
+        })
+            .disposed(by: disposeBag)
+
+        // LoadMore
+        viewModel.output.isLoadMore
+            .subscribe(onNext: { [weak self] isLoadMore in
+            guard let self = self else { return }
+            if isLoadMore {
+                self.tableView.addBottomLoadingView()
+            } else {
+                self.tableView.removeBottomLoadingView()
+            }
+        }).disposed(by: disposeBag)
+    }
+
+    override func bindToView() {
+        searchTF.rx.controlEvent([.editingChanged])
+            .debounce(.microseconds(1000), scheduler: MainScheduler.instance)
+            .asObservable().subscribe({ [weak self] _ in
+            guard let self = self else { return }
+            viewModel.input.onSearch.onNext(searchTF.text?.trim() ?? "")
+        }).disposed(by: disposeBag)
     }
 
 }
@@ -40,31 +84,19 @@ class GiftLocationViewController: BaseViewController, ViewControllerType {
 extension GiftLocationViewController: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return viewModel.output.locations.value.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueCell(ofType: GiftLocationTableViewCell.self, for: indexPath)
+        let list = viewModel.output.locations.value
+        cell.setDataForCell(data: list[indexPath.row], isLastItem: indexPath.row == list.count - 1)
         return cell
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.navigator.show(segue: .popup(
-            dismissable: true,
-            type: .twoOption,
-            title: "Truy cập Google Map",
-            message: "Coppy địa chỉ thành công. Bạn có muốn mở ứng dụng Google Maps để xem địa chỉ không?",
-            image: .imgGiftMap!,
-            confirmnButton: (title: "Đống ý", action: {
-                print("Open google map");
-            }),
-            cancelButton: (title: "Huỷ", action: nil)
-            )) { [weak self] vc in
-            guard let self = self else { return }
-            vc.modalPresentationStyle = .overFullScreen
-            vc.modalTransitionStyle = .crossDissolve
-            self.navigationController?.present(vc, animated: true)
-        }
+        let data = viewModel.output.locations.value[indexPath.count]
+        UtilHelper.openGoogleMap(navigator: self.navigator, parentVC: self, address: data.address ?? "")
     }
 
 }

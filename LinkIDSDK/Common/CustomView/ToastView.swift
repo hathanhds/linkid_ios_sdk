@@ -15,9 +15,9 @@ enum ToastType {
         case .success:
             return .icGiftCheckCircleWhite
         case .error:
-            return .icGiftCheckCircleWhite
+            return .iconWarning
         case .warning:
-            return .icGiftCheckCircleWhite
+            return .iconWarning
         }
     }
 
@@ -254,7 +254,7 @@ class ToastView: UIView {
             })
     }
 
-//    func show(_ view: UIView? = nil, duration: TimeInterval? = 5) {
+//    func show(_ view: UIView? = nil, duration: TimeInterval? = 1.0) {
 //        guard let view = view ?? ToastView.topWindow() else { return }
 //        view.addSubview(self)
 //        self.forceUpdates()

@@ -39,17 +39,14 @@ class MainTabBarController: UITabBarController {
                 userRepository: UserRepositoryImpl())
         )
         let homeNav = UINavigationController(rootViewController: homeVC)
-        homeNav.navigationBar.isHidden = true
         homeNav.tabBarItem = UITabBarItem(title: "Trang chủ",
             image: .icTabHomeInActive?.withRenderingMode(.alwaysOriginal),
             selectedImage: .icTabHomeActive?.withRenderingMode(.alwaysOriginal))
 
         let viewMode = AppConfig.shared.viewMode
         // MyReward
-//        let myRewardVC = viewMode == .anonymous ? AnonymousViewController.create(with: self.navigator, viewModel: AnonymousViewModel())
-//        : MyRewardViewController.create(with: self.navigator, viewModel: MyRewardViewModel(giftsRepository: GiftsRepositoryImpl()))
-        let myRewardVC = AnonymousViewController.create(with: self.navigator, viewModel: AnonymousViewModel())
-
+        let myRewardVC = viewMode == .anonymous ? AnonymousViewController.create(with: self.navigator, viewModel: AnonymousViewModel())
+        : MyRewardViewController.create(with: self.navigator, viewModel: MyRewardViewModel(giftsRepository: GiftsRepositoryImpl()))
         let myrewardNav = UINavigationController(rootViewController: myRewardVC)
         myrewardNav.navigationBar.isHidden = false
         myrewardNav.tabBarItem = UITabBarItem(title: "Quà của tôi",
@@ -58,14 +55,13 @@ class MainTabBarController: UITabBarController {
 
         // Transaction History
         let transactionHistoryVC = viewMode == .anonymous ? AnonymousViewController.create(with: self.navigator, viewModel: AnonymousViewModel())
-        : TransactionHistoryViewController.create(with: self.navigator, viewModel: DefaultTransactionHistoryViewModel())
+        : TransactionHistoryViewController.create(with: self.navigator, viewModel: TransactionHistoryViewModel(merchantRepository: MerchantRepositoryImp()))
         let transactionHistoryNav = UINavigationController(rootViewController: transactionHistoryVC)
-        transactionHistoryNav.navigationBar.isHidden = true
+        transactionHistoryNav.navigationBar.isHidden = false
         transactionHistoryNav.tabBarItem = UITabBarItem(title: "Lịch sử",
             image: .icTabTransaction?.withRenderingMode(.alwaysOriginal),
             selectedImage: .icTabTransaction?.withRenderingMode(.alwaysTemplate))
         // UserInfo
-//        let userInfoVC = UserInfoViewController.create(with: self.navigator, viewModel: DefaultUserInfoViewModel())
         let userInfoNav = UINavigationController(rootViewController: UIViewController())
         userInfoNav.navigationBar.isHidden = true
         userInfoNav.tabBarItem = UITabBarItem(title: "Tài khoản",

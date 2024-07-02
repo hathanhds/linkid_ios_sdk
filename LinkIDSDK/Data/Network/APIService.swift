@@ -18,7 +18,8 @@ enum APIService {
     case getListNewsAndBanner
     case getListGiftGroupForHomePage(maxItem: Int?)
     case getListGiftCate
-    case getUserInfo
+    case getListGiftCateDiamond(request: ListCateDiamondRequestModel)
+    case getMemberView
     case getUserPoint
     case getAllGifts(request: AllGiftsRequestModel)
     case getAllGiftGroups
@@ -27,6 +28,15 @@ enum APIService {
     case getSecurityPolicy
     case getListReward(request: MyRewardRequestModel)
     case getMyRewardDetail(giftTransactionCode: String)
+    case getLocation(request: LocationRequestModel)
+    case getGiftUsageLocation(request: GiftUsageLocationRequest)
+    case getListTransaction(request: TransactionHistoryRequestModel)
+    case getDetailTransaction(request: TransactionDetailRequestModel)
+    case getListMerchant(request: MerchantRequestModel)
+    case updateGiftStatus(transactionCode: String)
+    case getGiftDetail(giftId: String)
+    case createTransaction(request: CreateTransactionRequestModel)
+    case confirmOtpCreateTransaction(sessionId: String, otpCode: String)
 }
 
 extension APIService: TargetType {
@@ -56,11 +66,13 @@ extension APIService: TargetType {
         case .getListGiftCate:
             // GiftCategory
             return APIConstant.sdk.getListCate
+        case .getListGiftCateDiamond:
+            return APIConstant.sdk.getListCateDiamond
             // Member
-        case .getUserInfo:
-            return APIConstant.member.view
+        case .getMemberView:
+            return APIConstant.sdk.memberView
         case .getUserPoint:
-            return APIConstant.member.viewPoint
+            return APIConstant.sdk.viewPoint
         case .getAllGiftGroups:
             return APIConstant.sdk.getAllGiftGroups
         case .getListGiftsByGroup:
@@ -72,7 +84,24 @@ extension APIService: TargetType {
         case .getListReward,
              .getMyRewardDetail:
             return APIConstant.sdk.getAllWithEgift
-
+        case .getLocation:
+            return APIConstant.sdk.location
+        case .getGiftUsageLocation:
+            return APIConstant.sdk.getGiftUsageAddress
+        case .getListTransaction:
+            return APIConstant.sdk.transactionHistoryList
+        case .getListMerchant:
+            return APIConstant.sdk.merchantList
+        case .getDetailTransaction:
+            return APIConstant.sdk.transactionDetail
+        case .updateGiftStatus:
+            return APIConstant.sdk.updateGiftStatus
+        case .getGiftDetail:
+            return APIConstant.sdk.getGiftDetail
+        case .createTransaction:
+            return APIConstant.sdk.createTransaction
+        case .confirmOtpCreateTransaction:
+            return APIConstant.sdk.confirmOtpCreateTransaction
         }
     }
 
@@ -84,20 +113,31 @@ extension APIService: TargetType {
              .getListGiftGroupForHomePage,
              .getAllGifts,
              .getListGiftCate,
-             .getUserInfo,
+             .getListGiftCateDiamond,
+             .getMemberView,
              .getUserPoint,
              .getAllGiftGroups,
              .getListGiftsByGroup,
              .getTermsAndConditions,
              .getSecurityPolicy,
              .getListReward,
-             .getMyRewardDetail:
+             .getMyRewardDetail,
+             .getLocation,
+             .getGiftUsageLocation,
+             .getListTransaction,
+             .getListMerchant,
+             .getDetailTransaction,
+             .getGiftDetail:
             return .get
         case.generatePartnerToken,
              .checkMemberAndConnection,
              .authenWithConnectedPhone,
-             .createMember:
+             .createMember,
+             .createTransaction,
+             .confirmOtpCreateTransaction:
             return .post
+        case .updateGiftStatus:
+            return .put
         }
     }
 
@@ -153,7 +193,10 @@ extension APIService: TargetType {
             return .requestParameters(parameters: [
                 "MemberCode": AppConfig.shared.memberCode,
                 ], encoding: URLEncoding.queryString)
-        case .getUserInfo:
+        case .getListGiftCateDiamond(let request):
+            let params = request.getParams()
+            return .requestParameters(parameters: params, encoding: URLEncoding.queryString)
+        case .getMemberView:
             return .requestParameters(parameters: [
                 "MemberCode": AppConfig.shared.memberCode,
                 ], encoding: URLEncoding.queryString)
@@ -184,6 +227,42 @@ extension APIService: TargetType {
             return .requestParameters(parameters: params, encoding: URLEncoding.queryString)
         case .getMyRewardDetail(let giftTransactionCode):
             return .requestParameters(parameters: ["OwnerCodeFilter": AppConfig.shared.memberCode, "GiftTransactionCode": giftTransactionCode, "Ver": "next"], encoding: URLEncoding.queryString)
+        case .getLocation(let request):
+            let params = request.getParams()
+            return .requestParameters(parameters: params, encoding: URLEncoding.queryString)
+        case .getGiftUsageLocation(let request):
+            let params = request.getParams()
+            return .requestParameters(parameters: params, encoding: URLEncoding.queryString)
+        case .getListTransaction(let request):
+            let params = request.getParams()
+            return .requestParameters(parameters: params, encoding: URLEncoding.queryString)
+        case .getListMerchant(let request):
+            let params = request.getParams()
+            return .requestParameters(parameters: params, encoding: URLEncoding.queryString)
+        case .getDetailTransaction(let request):
+            let params = request.getParams()
+            return .requestParameters(parameters: params, encoding: URLEncoding.queryString)
+        case .updateGiftStatus(let transactionCode):
+            return .requestParameters(parameters: [
+                "memberCode": AppConfig.shared.memberCode,
+                "giftRedeemTransactionCode": transactionCode,
+                ], encoding: JSONEncoding.default)
+        case .getGiftDetail(let giftId):
+            return .requestParameters(parameters: [
+                "MemberCode": AppConfig.shared.memberCode,
+                "MaxItem": 5,
+                "GiftId": giftId
+                ], encoding: URLEncoding.queryString)
+        case .createTransaction(let request):
+            let params = request.getParams()
+            return .requestParameters(parameters: params, encoding: JSONEncoding.default)
+        case .confirmOtpCreateTransaction(let sessionId, let otpCode):
+            return .requestParameters(parameters: [
+                "memberCode": AppConfig.shared.memberCode,
+                "sessionId": sessionId,
+                "otpCode": otpCode,
+                "cifCode": AppConfig.shared.cif
+                ], encoding: JSONEncoding.default)
         default: return .requestPlain
         }
     }
@@ -203,7 +282,8 @@ extension APIService: TargetType {
              .getListNewsAndBanner,
              .getListGiftGroupForHomePage,
              .getListGiftsByGroup,
-             .getAllGiftGroups:
+             .getAllGiftGroups,
+             .getGiftDetail:
             return .seedToken
         default:
             return .accessToken
@@ -239,6 +319,8 @@ extension APIService: TargetType {
     }
 
     var baseURL: URL {
+//        let urlString = EnvConfig.shared.baseUrl
+//        return URL(string: urlString)!
         let urlString = EnvConfig.shared.baseUrl
         return URL(string: "https:/vpid-mobile-api-uat.linkid.vn")!
     }

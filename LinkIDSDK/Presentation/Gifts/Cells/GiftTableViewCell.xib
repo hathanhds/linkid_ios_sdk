@@ -26,19 +26,19 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5Wr-I9-vua">
-                        <rect key="frame" x="16" y="8" width="152" height="85"/>
+                        <rect key="frame" x="16" y="8" width="144" height="85"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="img_placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="1D5-d0-Wep">
-                                <rect key="frame" x="0.0" y="0.0" width="152" height="85"/>
+                                <rect key="frame" x="0.0" y="0.0" width="144" height="85"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="85" id="WLN-yG-Tf6"/>
                                 </constraints>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6PW-wo-MUN">
-                                <rect key="frame" x="116" y="0.0" width="36" height="15"/>
+                                <rect key="frame" x="106" y="0.0" width="38" height="15"/>
                                 <color key="backgroundColor" red="0.96078431372549022" green="0.3411764705882353" blue="0.30588235294117649" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="36" id="E9S-06-hek"/>
+                                    <constraint firstAttribute="width" constant="38" id="E9S-06-hek"/>
                                     <constraint firstAttribute="height" constant="15" id="clq-EP-kx2"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="BeVietnamPro-Regular" family="Be Vietnam Pro" pointSize="10"/>
@@ -59,16 +59,16 @@
                         </constraints>
                     </view>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2m3-kf-bFG">
-                        <rect key="frame" x="168" y="8" width="152" height="85"/>
+                        <rect key="frame" x="160" y="8" width="144" height="85"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Vocher giảm 5% trải nghiệm VinWonders" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ltQ-mA-Agh">
-                                <rect key="frame" x="16" y="8.0000000000000018" width="128" height="30.666666666666671"/>
+                                <rect key="frame" x="16" y="8.0000000000000018" width="120" height="30.666666666666671"/>
                                 <fontDescription key="fontDescription" name="BeVietnamPro-SemiBold" family="Be Vietnam Pro" pointSize="12"/>
                                 <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="Tcc-bo-UQj">
-                                <rect key="frame" x="16" y="48.666666666666664" width="128" height="14"/>
+                                <rect key="frame" x="16" y="48.666666666666664" width="120" height="14"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_coin_small" translatesAutoresizingMaskIntoConstraints="NO" id="F9C-q8-647">
                                         <rect key="frame" x="0.0" y="0.0" width="14" height="14"/>
@@ -83,7 +83,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="900.000" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ec7-Xy-2mX">
-                                        <rect key="frame" x="70.666666666666657" y="0.0" width="57.333333333333343" height="14"/>
+                                        <rect key="frame" x="70.666666666666657" y="0.0" width="49.333333333333343" height="14"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="10"/>
                                         <color key="textColor" red="0.65490196078431373" green="0.65490196078431373" blue="0.70196078431372544" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>

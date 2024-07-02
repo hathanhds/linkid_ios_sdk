@@ -21,7 +21,6 @@ class ListGiftByGroupViewModel: ViewModelType {
     }
 
     struct Output {
-
         let isLoadingGifts: BehaviorRelay<Bool>
         let gifts: BehaviorRelay<[GiftInfoItem]>
         let isLoadMore: BehaviorRelay<Bool>

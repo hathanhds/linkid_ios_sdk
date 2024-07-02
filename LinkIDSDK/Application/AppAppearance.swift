@@ -19,6 +19,7 @@ final class AppAppearance {
             appearance.backgroundColor = .mainColor
             UINavigationBar.appearance().standardAppearance = appearance
             UINavigationBar.appearance().scrollEdgeAppearance = appearance
+            UINavigationBar.appearance().compactAppearance = appearance
             UINavigationBar.appearance().tintColor = .white
         } else {
             UINavigationBar.appearance().barTintColor = .white

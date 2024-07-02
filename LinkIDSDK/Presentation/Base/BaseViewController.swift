@@ -33,11 +33,11 @@ class BaseViewController: UIViewController {
 
     func checkNetwork () {
         NotificationCenter.observe(name: .networkIsConnected) { _ in
-            self.hidePopup()
+//            self.hidePopup()
         }
 
         NotificationCenter.observe(name: .networkIsNotConnected) { _ in
-            self.showPopup()
+//            self.showPopup()
         }
     }
 
@@ -65,9 +65,7 @@ class BaseViewController: UIViewController {
 
         self.navigationController?.navigationBar.backIndicatorImage = icon
         self.navigationController?.navigationBar.backIndicatorTransitionMaskImage = icon
-        self.navigationController?.navigationBar.setGradientBackground(colors: [.c591C90!, .c971ACC!])
-
-
+        self.navigationController?.navigationBar.setGradientBackground(colors: [UIColor.c591C90!.cgColor, UIColor.c971ACC!.cgColor])
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: icon, style: .plain, target: self, action: selector)
     }
 
@@ -76,7 +74,7 @@ class BaseViewController: UIViewController {
     }
 
     func addRightBarButtonWith(image: UIImage?, title: String? = nil, selector: Selector) {
-        self.navigationController?.navigationBar.setGradientBackground(colors: [.c591C90!, .c971ACC!])
+        self.navigationController?.navigationBar.setGradientBackground(colors: [UIColor.c591C90!.cgColor, UIColor.c971ACC!.cgColor])
         if let image = image {
             self.navigationController?.navigationBar.backIndicatorImage = image
             self.navigationController?.navigationBar.backIndicatorTransitionMaskImage = image

@@ -10,4 +10,5 @@ import RxSwift
 protocol MyrewardRepository {
     func getListReward(request: MyRewardRequestModel) -> Single<BaseResponseModel<GiftListResultModel>>
     func getMyRewardDetail(giftTransactionCode: String) -> Single<BaseResponseModel<GiftListResultModel>>
+    func updateGiftStatus(transactionCode: String) -> Single<BaseResponseModel<String?>>
 }

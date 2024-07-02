@@ -51,7 +51,7 @@ class AccountExistAndNotConnectedViewController: BaseViewController, ViewControl
     }
 
     @IBAction func closeAction(_ sender: Any) {
-        // TODO: close APP
+        self.dismiss(animated: true)
     }
 
     @IBAction func skipAction(_ sender: Any) {

@@ -25,3 +25,9 @@ struct BaseResponseModel2<T: Codable>: Codable {
     var isSuccess: Bool?
 }
 
+struct APIErrorResponseModel: Codable, LocalizedError {
+    var code: String?
+    var message: String?
+    var messageDetail: String?
+}
+

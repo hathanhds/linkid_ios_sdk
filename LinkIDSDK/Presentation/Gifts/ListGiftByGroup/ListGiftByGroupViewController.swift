@@ -112,5 +112,14 @@ extension ListGiftByGroupViewController: UITableViewDataSource, UITableViewDeleg
         }
     }
 
+    // MARK: - Delegate
 
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if let giftId = viewModel.output.gifts.value[indexPath.row].giftInfor?.id {
+            self.navigator.show(segue: .giftDetail(giftId: "\(giftId)")) { [weak self] vc in
+                guard let self = self else { return }
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
+        }
+    }
 }

@@ -43,6 +43,7 @@ class AccountExistAndConnectedViewController: BaseViewController, ViewController
 
     override func initView() {
         let fontRegular = UIFont(name: "BeVietnamPro-Regular", size: 14.0)!
+
         let attribute1 = "Số điện thoại ".withAttributes([
                 .textColor(.c6D6B7A!),
                 .font(fontRegular)

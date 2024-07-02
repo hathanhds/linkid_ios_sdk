@@ -8,7 +8,7 @@
 import RxSwift
 
 protocol UserRepository {
-    func getUserInfo() -> Single<UserInfoResponseModel>
-    func getUserPoint() -> Single<UserPointResponseModel>
-
+    func getMemberView() -> Single<MemberViewResponseModel>
+    func getUserPoint() -> Single<BaseResponseModel2<UserPointResponseModel>>
+    func getLocation(request: LocationRequestModel) -> Single<BaseResponseModel<LocationResponseModel>>
 }

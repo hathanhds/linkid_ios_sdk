@@ -64,3 +64,14 @@ enum TopupCateType: String {
         }
     }
 }
+
+enum SearchState {
+    case initial, searchResult, emptyResult
+}
+
+enum FlashSaleStatus {
+    case upcomingFlashSale
+    case inFlashSale
+    case end
+    case none
+}

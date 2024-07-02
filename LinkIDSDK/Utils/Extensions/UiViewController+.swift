@@ -7,6 +7,8 @@
 
 import UIKit
 import SVProgressHUD
+import iCarousel
+import EasyTipView
 
 extension UIViewController {
 
@@ -72,5 +74,63 @@ extension UIViewController {
             }
         }
     }
+}
 
+extension UIViewController {
+    private func dismissAllPresentedViewControllers(animated: Bool, completion: (() -> Void)? = nil) {
+        if let presentedVC = self.presentedViewController {
+            presentedVC.dismiss(animated: animated) {
+                self.dismissAllPresentedViewControllers(animated: animated, completion: completion)
+            }
+        } else {
+            completion?()
+        }
+    }
+
+    func dimissAllViewControllers() {
+        if #available(iOS 13.0, *) {
+            if let rootViewController = UIApplication.shared.windows.first(where: { $0.isKeyWindow })?.rootViewController {
+                rootViewController.dismissAllPresentedViewControllers(animated: true)
+            }
+        } else {
+            if let rootViewController = UIApplication.shared.keyWindow?.rootViewController {
+                rootViewController.dismissAllPresentedViewControllers(animated: true)
+            }
+        }
+    }
+}
+
+extension UIViewController {
+    func setUpEasyView(tipView: inout EasyTipView) {
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(self.dimissTipView))
+        self.view.addGestureRecognizer(gesture)
+
+        var preferences = EasyTipView.Preferences()
+        preferences.drawing.font = .systemFont(ofSize: 14)
+        preferences.drawing.foregroundColor = .white
+        preferences.drawing.backgroundColor = .c242424!
+        preferences.drawing.arrowPosition = EasyTipView.ArrowPosition.bottom
+        tipView = EasyTipView(text: "Ưu đãi có giá trị sử dụng đến 23:59 căn cứ theo giờ Việt Nam (GMT+7) và theo hệ thống LYNKID.", preferences: preferences)
+    }
+
+    @objc func dimissTipView(sender: UITapGestureRecognizer) {
+        for v in self.view.subviews {
+            if let v = v as? EasyTipView {
+                v.dismiss()
+                return
+            }
+        }
+    }
+}
+
+extension UIViewController {
+
+    func setUpCarousel(carousel: iCarousel, cornerRadius: CGFloat = 0) {
+        carousel.type = .linear
+        carousel.layer.masksToBounds = false
+        carousel.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMinXMinYCorner]
+        carousel.layer.cornerRadius = cornerRadius
+        carousel.scrollToItem(at: 0, animated: true)
+        carousel.isPagingEnabled = true
+    }
 }

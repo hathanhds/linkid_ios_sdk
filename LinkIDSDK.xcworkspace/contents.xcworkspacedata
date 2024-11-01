@@ -2,7 +2,7 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:LinkIDSDK.xcodeproj">
+      location = "group:/Users/thanhnth/Git/VPBank/linkid_sdk/linkid_ios_sdk/LynkiDSDK.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Pods/Pods.xcodeproj">

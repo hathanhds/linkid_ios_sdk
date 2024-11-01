@@ -16,6 +16,7 @@ target 'LinkIDSDK' do
   pod 'SwiftyAttributes'
   pod 'Tabman', '~> 3.0', :modular_headers => true
   pod 'EasyTipView'
+  pod 'SVGKit', :modular_headers => true
   
   #inherit! :search_paths
   

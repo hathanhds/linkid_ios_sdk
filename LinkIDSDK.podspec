@@ -4,6 +4,7 @@ Pod::Spec.new do |s|
   # 1
   s.platform = :ios
   s.ios.deployment_target = '12.0'
+  s.platform = :ios, '12.0'
   s.name = "LinkIDSDK"
   s.summary = "LinkIDSDK lets a user exchange vocuher"
   s.requires_arc = true
@@ -23,6 +24,8 @@ Pod::Spec.new do |s|
   # 6
   s.source = { :git => "https://github.com/hathanhds/linkid_ios_sdk.git", 
                :tag => "#{s.version}" }
+
+  s.vendored_frameworks = "LinkIDSDK.framework"
   
   # 7
   s.framework = "UIKit"
@@ -36,13 +39,14 @@ Pod::Spec.new do |s|
   s.dependency 'SwiftyAttributes'
   s.dependency 'Tabman', '~> 3.0'
   s.dependency 'EasyTipView'
-  #s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
+  s.dependency 'SVGKit'
+  s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
   
   # 8
   s.source_files = "LinkIDSDK/**/*.{swift}"
   
   # 9
-  s.resources = "LinkIDSDK/**/*.{png,jpeg,jpg,storyboard,xib,xcassets,ttf}"
+  s.resources = "LinkIDSDK/**/*.{png,jpeg,jpg,storyboard,xib,xcassets,ttf,svg,html}"
   
   # 10
   s.swift_version = "4.2"
